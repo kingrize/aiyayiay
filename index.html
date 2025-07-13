@@ -14,6 +14,40 @@
             overflow: hidden;
             background: linear-gradient(180deg, #001220 0%, #001f36 100%);
         }
+        
+        .floating-lyrics {
+            position: fixed;
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.8s ease-out;
+            text-align: center;
+            width: auto;
+            max-width: 80%;
+            padding: 10px 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            white-space: nowrap;
+            z-index: 5;
+            left: 50%;
+            transform-origin: center;
+        }
+
+        .floating-lyrics.visible {
+            opacity: 1;
+            color: rgba(255, 255, 255, 0.9);
+            transform: translateY(0) scale(1);
+        }
+
+        @keyframes floatSideways {
+            0% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+            100% { transform: translateX(-50%) translateY(0); }
+        }
 
         .stars {
             position: fixed;
@@ -115,13 +149,40 @@
         .nav-button {
             background: rgba(255, 255, 255, 0.1);
             border: none;
-            padding: 8px 20px;
+            padding: 12px 25px;
             border-radius: 20px;
             color: white;
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+            min-width: 120px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .nav-button span {
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-button::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            z-index: 0;
+            cursor: pointer;
+            border-radius: inherit;
         }
 
         .nav-button:hover {
@@ -132,6 +193,7 @@
         .nav-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            pointer-events: none;
         }
 
         .icon-trigger {
@@ -177,12 +239,16 @@
 
         .message span {
             display: inline-block;
-            animation: fadeIn 0.5s ease-out forwards;
             opacity: 0;
         }
 
+        .message span.animate {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
         @keyframes fadeIn {
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .star {
@@ -221,6 +287,275 @@
             100% {
                 transform: rotate(25deg) translateX(120vw);
                 opacity: 0;
+            }
+        }
+
+        .gallery-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            min-width: 180px;
+            z-index: 1;
+        }
+
+        .gallery-button::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            z-index: 0;
+            cursor: pointer;
+        }
+
+        .gallery-button.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-overlay.visible {
+            opacity: 1;
+        }
+
+        .gallery-popup {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            padding: 24px;
+            border-radius: 20px;
+            max-width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease-out;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+            border-radius: 12px;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Tambahkan style untuk galeri dan popup */
+        .gallery {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .gallery.visible {
+            display: flex;
+        }
+
+        .gallery img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .gallery:target {
+            display: flex;
+        }
+
+        /* Animasi untuk tombol galeri */
+        .gallery-button {
+            position: relative;
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .gallery-button:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: transform 0.4s ease;
+            z-index: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .gallery-button:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .gallery-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Style untuk popup gambar */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .popup.visible {
+            display: flex;
+        }
+
+        .popup img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .popup:target {
+            display: flex;
+        }
+
+        /* Animasi untuk gambar dalam popup */
+        .popup img {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -232,6 +567,20 @@
         <div class="wave wave-3"></div>
     </div>
     
+    <audio id="bgMusic" preload="auto">
+        <source src="https://github.com/kingrize/aiyayiay/raw/refs/heads/main/song/do_you_think_you_could_love_me.mp3" type="audio/mp3">
+        <source src="./song/do_you_think_you_could_love_me.mp3" type="audio/mp3">
+    </audio>
+    
+    <div class="popup-overlay" id="galleryOverlay">
+        <div class="gallery-popup">
+            <button class="close-button" id="closeGallery">×</button>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items akan ditambahkan melalui JavaScript -->
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="icon-trigger" id="trigger">
             <img src="https://ik.imagekit.io/notargazyu/ayayaya/tobbycat.gif" alt="Cute Cat">
@@ -259,15 +608,22 @@
                     <span>Semoga harimu seindah langit malam yang kamu suka,</span><br>
                     <span>semanis es krim favoritmu,</span><br>
                     <span>dan sehangat pelukan kucing kesayanganmu.</span><br><br>
-                    <span>Jangan lupa tersenyum hari ini! 💖</span>
+                    <span>Jangan lupa tersenyum hari ini! 💖</span><br>
+                    <button class="gallery-button" id="openGallery" style="display: none;">Lihat Gallery Kucing 🐱</button>
                 </div>
             </div>
             <div class="nav-buttons" id="messageNav">
-                <button class="nav-button" id="prevBtn" disabled>← Prev</button>
-                <button class="nav-button" id="nextBtn">Next →</button>
+                <button class="nav-button" id="prevBtn" disabled><span style="pointer-events: none;">← Prev</span></button>
+                <button class="nav-button" id="nextBtn"><span style="pointer-events: none;">Next →</span></button>
             </div>
         </div>
+        <button class="gallery-button" id="openGallery">
+            <span>Buka Galeri 📸</span>
+        </button>
     </div>
+
+    <!-- Sudah tidak diperlukan karena duplikat -->
+    
 
     <script>
         // Membuat bintang-bintang
@@ -332,11 +688,10 @@
         function animateMessage(page) {
             const spans = page.querySelectorAll('span');
             spans.forEach((span, index) => {
-                span.style.animation = 'none';
-                span.offsetHeight; // Trigger reflow
+                span.classList.remove('animate');
                 setTimeout(() => {
-                    span.style.animation = 'fadeIn 0.5s ease-out forwards';
-                }, index * 200);
+                    span.classList.add('animate');
+                }, index * 100);
             });
         }
 
@@ -344,35 +699,118 @@
         let currentPage = 1;
         const totalPages = 4;
 
+        let isAnimating = false;
+
         function updateNavigation() {
+            if (isAnimating) return;
+            isAnimating = true;
+
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
+            const galleryBtn = document.getElementById('openGallery');
             
             prevBtn.disabled = currentPage === 1;
             nextBtn.disabled = currentPage === totalPages;
             
-            document.querySelectorAll('.message-page').forEach(page => {
-                page.style.display = 'none';
-            });
+            const oldPage = document.querySelector('.message-page[style*="block"]');
+            const newPage = document.querySelector(`.message-page[data-page="${currentPage}"]`);
             
-            const currentPageEl = document.querySelector(`.message-page[data-page="${currentPage}"]`);
-            currentPageEl.style.display = 'block';
-            animateMessage(currentPageEl);
+            if (oldPage) {
+                oldPage.style.display = 'none';
+            }
+            
+            newPage.style.display = 'block';
+            animateMessage(newPage);
+            
+            // Enable buttons after animation completes
+            setTimeout(() => {
+                isAnimating = false;
+            }, 300);
+
+            // Tampilkan tombol gallery hanya di halaman terakhir
+            if (galleryBtn) {
+                if (currentPage === totalPages) {
+                    galleryBtn.style.display = 'inline-block';
+                    setTimeout(() => {
+                        galleryBtn.classList.add('visible');
+                    }, 1000);
+                } else {
+                    galleryBtn.style.display = 'none';
+                    galleryBtn.classList.remove('visible');
+                }
+            }
         }
 
+        // Gallery functionality
+        const galleryOverlay = document.getElementById('galleryOverlay');
+        const openGalleryBtn = document.getElementById('openGallery');
+        const closeGalleryBtn = document.getElementById('closeGallery');
+
+        function showGallery() {
+            galleryOverlay.style.display = 'flex';
+            setTimeout(() => {
+                galleryOverlay.classList.add('visible');
+            }, 10);
+        }
+
+        function hideGallery() {
+            galleryOverlay.classList.remove('visible');
+            setTimeout(() => {
+                galleryOverlay.style.display = 'none';
+            }, 300);
+        }
+
+        openGalleryBtn.addEventListener('click', showGallery);
+        closeGalleryBtn.addEventListener('click', hideGallery);
+
+        galleryOverlay.addEventListener('click', (e) => {
+            if (e.target === galleryOverlay) {
+                hideGallery();
+            }
+        });
+
         // Event listener untuk icon trigger
-        document.getElementById('trigger').addEventListener('click', function() {
+        document.getElementById('trigger').addEventListener('click', async function() {
             const messageContainer = document.getElementById('messageContainer');
             const message = document.getElementById('message');
             const messageNav = document.getElementById('messageNav');
             
             if (!messageContainer.classList.contains('visible')) {
+                // Start music first
+                try {
+                    bgMusic.load(); // Reload the audio element
+                    const playPromise = bgMusic.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                console.log('Audio started playing');
+                                musicStarted = true;
+                                bgMusic.volume = 0.5;
+                                updateLyrics();
+                            })
+                            .catch(error => {
+                                console.error('Playback failed:', error);
+                                // Try alternative playback method
+                                setTimeout(() => {
+                                    bgMusic.play()
+                                        .then(() => {
+                                            musicStarted = true;
+                                            bgMusic.volume = 0.5;
+                                            updateLyrics();
+                                        })
+                                        .catch(e => console.error('Retry failed:', e));
+                                }, 1000);
+                            });
+                    }
+                } catch (error) {
+                    console.error('Error playing music:', error);
+                }
+
                 messageContainer.classList.add('visible');
                 setTimeout(() => {
                     message.classList.add('visible');
                     messageNav.classList.add('visible');
                     updateNavigation();
-                    // Mulai animasi bintang jatuh setelah pesan muncul
                     startShootingStars();
                 }, 500);
                 
@@ -400,8 +838,245 @@
             }
         });
 
+        // Lyrics data
+        const lyrics = [
+            { time: 1, text: "Hii, Yara Biuu here "},
+            { time: 15, text: "Jiya is my middle name hehe" },
+            { time: 28, text: "Beautiful sight, I see when I sleep" },
+            { time: 34, text: "You under streetlights, waiting for me" },
+            { time: 43, text: "Hold my hand" },
+            { time: 45, text: "I'll take you through my dreams" },
+            { time: 51, text: "Wherever you are" },
+            { time: 56, text: "I'll never let go 'cause you're the one I want" },
+            { time: 62, text: "Stay with my life, I can promise you your smile" },
+            { time: 71, text: "With all my days" },
+            { time: 78, text: "Do you think you could love me?" },
+            { time: 84, text: "And I'll show you what makes you lovely" },
+            { time: 92, text: "I love you to the stars and back" },
+            { time: 99, text: "Give me your heart and I'll give you mine" },
+            { time: 111, text: "Don't you like when I'm around?" },
+            { time: 115, text: "Could you just pretend you care? " },
+            { time: 118, text: "I belong with you, my love " },
+            { time: 122, text: "Dreaming you anywhere" },
+            { time: 127, text: "We can watch the sunset, but you're with me there" },
+            { time: 137, text: "And I'll" },
+            { time: 143, text: "Pray for a light" },
+            { time: 147, text: "And hope it brings you right to me" },
+            { time: 154, text: "I'll watch you shining, my darling" },
+            { time: 162, text: "Do you think you could love me?" },
+            { time: 168, text: "And I'll show you what makes you lovely" },
+            { time: 176, text: "I love you to the stars and back" },
+            { time: 182, text: "Give me your heart and I'll give you mine" },
+            { time: 190, text: "I LOVE YOU YaraAA!" },
+            { time: 195, text: "YaRaAraRAraRAraa" }
+        ];
+
+        // Music and lyrics functionality
+        const bgMusic = document.getElementById('bgMusic');
+        const lyricsContainer = document.getElementById('lyricsContainer');
+        let musicStarted = false;
+        let currentLyricIndex = 0;
+
+        function updateLyrics() {
+            if (!musicStarted) return;
+
+            const currentTime = Math.floor(bgMusic.currentTime);
+            
+            // Check all lyrics that need to be displayed
+            while (currentLyricIndex < lyrics.length) {
+                const currentLyric = lyrics[currentLyricIndex];
+                const nextLyric = lyrics[currentLyricIndex + 1];
+                
+                // If current time is past the lyric time but before next lyric
+                if (currentTime >= currentLyric.time && (!nextLyric || currentTime < nextLyric.time)) {
+                    // Create a new lyrics container
+                    const newLyricElement = document.createElement('div');
+                    newLyricElement.className = 'floating-lyrics';
+                    document.body.appendChild(newLyricElement);
+
+                    // Fixed positions for better readability
+                    const positions = [
+                        { top: '25%', animation: 'floatSideways 3s ease-in-out infinite' },
+                        { top: '45%', animation: 'floatSideways 3s ease-in-out infinite' },
+                        { top: '65%', animation: 'floatSideways 3s ease-in-out infinite' },
+                        { top: '85%', animation: 'floatSideways 3s ease-in-out infinite' }
+                    ];
+                    
+                    const position = positions[currentLyricIndex % positions.length];
+                    
+                    // Set position and content
+                    newLyricElement.style.top = position.top;
+                    newLyricElement.style.animation = position.animation;
+                    newLyricElement.textContent = currentLyric.text;
+                    newLyricElement.style.transform = 'translateX(-50%)';
+                    
+                    // Show lyric with animation
+                    requestAnimationFrame(() => {
+                        newLyricElement.classList.add('visible');
+                    });
+
+                    // Calculate display duration based on next lyric
+                    const displayDuration = nextLyric 
+                        ? (nextLyric.time - currentLyric.time) * 1000 
+                        : 4000;
+
+                    // Remove after appropriate duration
+                    setTimeout(() => {
+                        newLyricElement.style.transition = 'all 0.5s ease-out';
+                        newLyricElement.style.opacity = '0';
+                        setTimeout(() => {
+                            newLyricElement.remove();
+                        }, 500);
+                    }, Math.min(displayDuration, 4000)); // Cap at 4 seconds maximum
+
+                    currentLyricIndex++;
+                } else {
+                    break; // Wait for next timing check
+                }
+            }
+
+            // Continue checking
+            requestAnimationFrame(updateLyrics);
+        }
+
+        // Add event listener for when music ends
+        bgMusic.addEventListener('ended', () => {
+            musicStarted = false;
+            currentLyricIndex = 0;
+        });
+
+        // Add event listener for music loading
+        bgMusic.addEventListener('canplaythrough', () => {
+            console.log('Music loaded and ready to play');
+        });
+
+        // Add error handling for music
+        bgMusic.addEventListener('error', (e) => {
+            console.error('Error loading music:', e);
+        });
+
+        function startMusic() {
+            if (!musicStarted) {
+                musicStarted = true;
+                bgMusic.volume = 0.5; // Set volume to 50%
+                bgMusic.play();
+                updateLyrics();
+            }
+        }
+
+        // Modify existing trigger click event to include music
+        document.getElementById('trigger').addEventListener('click', function() {
+            startMusic(); // Start music on first interaction
+            const messageContainer = document.getElementById('messageContainer');
+            const message = document.getElementById('message');
+            const messageNav = document.getElementById('messageNav');
+            
+            if (!messageContainer.classList.contains('visible')) {
+                messageContainer.classList.add('visible');
+                setTimeout(() => {
+                    message.classList.add('visible');
+                    messageNav.classList.add('visible');
+                    updateNavigation();
+                    startShootingStars();
+                }, 500);
+                
+                const img = this.querySelector('img');
+                img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbylove.gif';
+                setTimeout(() => {
+                    img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
+                }, 5000);
+            }
+        });
+
         // Inisialisasi bintang saat halaman dimuat
         createStars();
+
+        // Galeri gambar
+        const galleryImages = [
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya1.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya2.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya3.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya4.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya5.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya6.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya7.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya8.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya9.jpg',
+            'https://ik.imagekit.io/notargazyu/ayayaya/aya10.jpg'
+        ];
+
+        const galleryGrid = document.getElementById('galleryGrid');
+
+        // Menambahkan gambar ke galeri
+        galleryImages.forEach((imageSrc) => {
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'gallery-item';
+
+            const imgElement = document.createElement('img');
+            imgElement.src = imageSrc;
+            imgElement.alt = 'Gallery Image';
+            imgElement.loading = 'lazy'; // Untuk performa yang lebih baik
+            
+            // Tambahkan gambar ke container
+            itemContainer.appendChild(imgElement);
+
+            // Tambahkan event listener untuk popup
+            itemContainer.addEventListener('click', () => {
+                openImageInPopup(imageSrc);
+            });
+
+            // Menambahkan container ke dalam grid galeri
+            galleryGrid.appendChild(itemContainer);
+        });
+
+        // Event listener untuk membuka galeri sudah ditangani di atas dengan showGallery()
+        // Event listener untuk menutup galeri sudah ditangani di atas dengan hideGallery()
+
+        // Membuka gambar dalam popup saat diklik
+        function openImageInPopup(imageSrc) {
+            const popup = document.createElement('div');
+            popup.className = 'popup visible';
+
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.alt = 'Popup Image';
+
+            // Menambahkan efek fadeIn pada gambar popup
+            img.style.animation = 'fadeIn 0.5s ease-out';
+
+            popup.appendChild(img);
+            document.body.appendChild(popup);
+
+            // Menutup popup saat diklik
+            popup.addEventListener('click', () => {
+                popup.remove();
+            });
+        }
+
+        // Menambahkan event listener untuk setiap gambar di galeri
+        document.querySelectorAll('.gallery-item').forEach((item) => {
+            item.addEventListener('click', () => {
+                const imageSrc = item.querySelector('img').src;
+                openImageInPopup(imageSrc);
+            });
+        });
+
+        // Add this at the start of your JavaScript code
+function initializeAudio() {
+    bgMusic.addEventListener('loadeddata', () => {
+        console.log('Audio loaded successfully');
+    });
+
+    bgMusic.addEventListener('error', (e) => {
+        console.error('Audio loading error:', e);
+    });
+
+    // Force reload audio
+    bgMusic.load();
+}
+
+// Call initializeAudio when the page loads
+window.addEventListener('load', initializeAudio);
     </script>
 </body>
 </html>
