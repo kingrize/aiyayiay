@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pesan Untukmu</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -17,36 +17,29 @@
         
         .floating-lyrics {
             position: fixed;
-            font-size: 1.2em;
+            font-size: 0.9em;
             color: rgba(255, 255, 255, 0);
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             pointer-events: none;
             opacity: 0;
-            transform: translateY(20px) scale(0.95);
-            transition: all 0.8s ease-out;
+            transform: translateX(-50%);
+            transition: all 0.5s ease-out;
             text-align: center;
             width: auto;
-            max-width: 80%;
-            padding: 10px 20px;
-            border-radius: 15px;
+            max-width: 90%;
+            padding: 8px 15px;
+            border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(5px);
             white-space: nowrap;
             z-index: 5;
             left: 50%;
-            transform-origin: center;
+            bottom: 10%;
         }
 
         .floating-lyrics.visible {
             opacity: 1;
             color: rgba(255, 255, 255, 0.9);
-            transform: translateY(0) scale(1);
-        }
-
-        @keyframes floatSideways {
-            0% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-            100% { transform: translateX(-50%) translateY(0); }
         }
 
         .stars {
@@ -223,8 +216,8 @@
         }
 
         .message {
-            font-size: 1.2em;
-            line-height: 1.8;
+            font-size: 1em;
+            line-height: 1.6;
             opacity: 0;
             transform: translateY(20px);
             font-weight: 400;
@@ -894,19 +887,8 @@
                     newLyricElement.className = 'floating-lyrics';
                     document.body.appendChild(newLyricElement);
 
-                    // Fixed positions for better readability
-                    const positions = [
-                        { top: '25%', animation: 'floatSideways 3s ease-in-out infinite' },
-                        { top: '45%', animation: 'floatSideways 3s ease-in-out infinite' },
-                        { top: '65%', animation: 'floatSideways 3s ease-in-out infinite' },
-                        { top: '85%', animation: 'floatSideways 3s ease-in-out infinite' }
-                    ];
-                    
-                    const position = positions[currentLyricIndex % positions.length];
-                    
-                    // Set position and content
-                    newLyricElement.style.top = position.top;
-                    newLyricElement.style.animation = position.animation;
+                    // Set content and position at bottom
+                    newLyricElement.style.bottom = '10%';
                     newLyricElement.textContent = currentLyric.text;
                     newLyricElement.style.transform = 'translateX(-50%)';
                     
