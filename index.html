@@ -86,11 +86,52 @@
             box-shadow: 
                 0 4px 16px rgba(255, 182, 193, 0.2),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
         .message-container.visible {
             opacity: 1;
             transform: scale(1);
+        }
+
+        .nav-buttons {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+
+        .nav-buttons.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .icon-trigger {
@@ -197,15 +238,33 @@
         </div>
         <div class="message-container" id="messageContainer">
             <div class="message" id="message">
-                <span>Hai kamu! ✨</span><br>
-                <span>Aku tahu kamu suka kucing 🐱</span><br>
-                <span>es krim yang lembut 🍦</span><br>
-                <span>langit malam di pantai yang indah 🌌</span><br>
-                <span>dan warna pink yang manis 💗</span><br><br>
-                <span>Semoga harimu seindah langit malam yang kamu suka,</span><br>
-                <span>semanis es krim favoritmu,</span><br>
-                <span>dan sehangat pelukan kucing kesayanganmu.</span><br><br>
-                <span>Jangan lupa tersenyum hari ini! 💖</span>
+                <div class="message-page" data-page="1">
+                    <span>Hai kamu! ✨</span><br>
+                    <span>Aku punya beberapa pesan spesial untukmu...</span><br>
+                    <span>Mau tau apa aja? 💝</span><br>
+                </div>
+                <div class="message-page" data-page="2" style="display: none;">
+                    <span>Aku tahu kamu suka kucing 🐱</span><br>
+                    <span>es krim yang lembut 🍦</span><br>
+                    <span>langit malam di pantai yang indah 🌌</span><br>
+                    <span>dan warna pink yang manis 💗</span><br>
+                </div>
+                <div class="message-page" data-page="3" style="display: none;">
+                    <span>Di malam yang tenang ini...</span><br>
+                    <span>Aku ingin kamu tahu bahwa...</span><br>
+                    <span>Kamu adalah orang yang spesial! ⭐</span><br>
+                    <span>Yang selalu membuat orang lain tersenyum 😊</span><br>
+                </div>
+                <div class="message-page" data-page="4" style="display: none;">
+                    <span>Semoga harimu seindah langit malam yang kamu suka,</span><br>
+                    <span>semanis es krim favoritmu,</span><br>
+                    <span>dan sehangat pelukan kucing kesayanganmu.</span><br><br>
+                    <span>Jangan lupa tersenyum hari ini! 💖</span>
+                </div>
+            </div>
+            <div class="nav-buttons" id="messageNav">
+                <button class="nav-button" id="prevBtn" disabled>← Prev</button>
+                <button class="nav-button" id="nextBtn">Next →</button>
             </div>
         </div>
     </div>
@@ -269,26 +328,50 @@
             shootingStarInterval = setInterval(createShootingStar, 1800);
         }
 
-        // Animasi text
-        function animateMessage() {
-            const spans = document.querySelectorAll('.message span');
+        // Animasi text untuk halaman yang aktif
+        function animateMessage(page) {
+            const spans = page.querySelectorAll('span');
             spans.forEach((span, index) => {
+                span.style.animation = 'none';
+                span.offsetHeight; // Trigger reflow
                 setTimeout(() => {
                     span.style.animation = 'fadeIn 0.5s ease-out forwards';
                 }, index * 200);
             });
         }
 
+        // Navigasi pesan
+        let currentPage = 1;
+        const totalPages = 4;
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+            
+            document.querySelectorAll('.message-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            const currentPageEl = document.querySelector(`.message-page[data-page="${currentPage}"]`);
+            currentPageEl.style.display = 'block';
+            animateMessage(currentPageEl);
+        }
+
         // Event listener untuk icon trigger
         document.getElementById('trigger').addEventListener('click', function() {
             const messageContainer = document.getElementById('messageContainer');
             const message = document.getElementById('message');
+            const messageNav = document.getElementById('messageNav');
             
             if (!messageContainer.classList.contains('visible')) {
                 messageContainer.classList.add('visible');
                 setTimeout(() => {
                     message.classList.add('visible');
-                    animateMessage();
+                    messageNav.classList.add('visible');
+                    updateNavigation();
                     // Mulai animasi bintang jatuh setelah pesan muncul
                     startShootingStars();
                 }, 500);
@@ -299,6 +382,21 @@
                 setTimeout(() => {
                     img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
                 }, 5000);
+            }
+        });
+
+        // Event listeners untuk tombol navigasi
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateNavigation();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateNavigation();
             }
         });
 
