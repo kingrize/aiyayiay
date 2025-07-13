@@ -3,55 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kejutan di Tepi Pantai</title>
+    <title>Pesan Untukmu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Mengimpor font yang lebih cocok */
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:wght@400&display=swap');
-
-        body, html {
-            height: 100%;
+        body {
             margin: 0;
+            min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
+            color: #fff;
             overflow: hidden;
-            font-family: 'Poppins', sans-serif;
-            background-color: #1a1423;
+            background: linear-gradient(180deg, #001220 0%, #001f36 100%);
         }
 
-        /* Kontainer utama untuk seluruh adegan */
-        .scene {
-            position: relative;
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, #3c315a 0%, #2c2143 50%, #1a1423 100%);
-            overflow: hidden;
+            pointer-events: none;
         }
+        
 
-        /* Bulan sabit di langit */
-        .moon {
-            position: absolute;
-            top: 15%;
-            right: 15%;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            box-shadow: 15px -15px 0 0 #fffde7;
-            transform: rotate(45deg);
+
+        .sea {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 25%;
+            background: linear-gradient(to top, rgba(74,63,120,0.8), transparent);
             opacity: 0.8;
+            z-index: 2;
+            pointer-events: none;
         }
 
-        /* Bintang-bintang yang berkelip */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 100'%3E%3Cpath d='M0 50 C100 20, 200 80, 300 50 C400 20, 500 80, 600 50 C700 20, 800 80, 900 50 L900 100 L0 100 Z' fill='rgba(74,63,120,0.5)'/%3E%3C/svg%3E");
+            animation: wave-move 10s linear infinite;
+        }
+
+        .wave-2 {
+            animation: wave-move 7s linear infinite;
+            opacity: 0.6;
+        }
+
+        .wave-3 {
+            animation: wave-move 15s linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes wave-move {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .container {
+            position: relative;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 32px;
+            text-align: center;
+            z-index: 3;
+        }
+
+        .message-container {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s ease-out;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 
+                0 4px 16px rgba(255, 182, 193, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .message-container.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .icon-trigger {
+            cursor: pointer;
+            display: inline-block;
+            margin: 20px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .icon-trigger img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .icon-trigger:hover img {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .message {
+            font-size: 1.2em;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(20px);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .message.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.5s ease-out;
+        }
+
+        .message span {
+            display: inline-block;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
         .star {
             position: absolute;
-            background-color: white;
+            background: white;
             border-radius: 50%;
-            animation: twinkle 2s infinite alternate;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0;
+            box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
         }
 
         @keyframes twinkle {
-            from { opacity: 0.5; box-shadow: 0 0 5px #fff; }
-            to { opacity: 1; box-shadow: 0 0 10px #fff, 0 0 15px #f8bbd0; }
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Animasi Bintang Jatuh yang Ditulis Ulang */
         .shooting-star {
             position: absolute;
             height: 2px;
@@ -59,7 +165,7 @@
             background: linear-gradient(to left, white, transparent);
             border-radius: 999px;
             filter: drop-shadow(0 0 6px white);
-            transform: rotate(25deg); /* Arah jatuh bintang */
+            transform: rotate(25deg);
             animation: shoot linear infinite;
         }
 
@@ -74,289 +180,130 @@
             100% {
                 transform: rotate(25deg) translateX(120vw);
                 opacity: 0;
-            }
         }
-
-
-        /* Konten di darat (pasir, kucing, es krim) */
-        .foreground {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 40%;
-            transition: transform 1.5s ease-in-out, opacity 1s ease;
-        }
-        
-        /* Lautan dengan ombak lembut */
-        .sea {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 25%;
-            background: linear-gradient(to top, #4a3f78, transparent);
-            opacity: 0.8;
-        }
-        .wave {
-            position: absolute;
-            bottom: 23%;
-            width: 200%;
-            height: 100px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 100'%3E%3Cpath d='M0 50 C100 20, 200 80, 300 50 C400 20, 500 80, 600 50 C700 20, 800 80, 900 50 L900 100 L0 100 Z' fill='rgba(74,63,120,0.5)'/%3E%3C/svg%3E");
-            animation: wave-move 10s linear infinite;
-        }
-        @keyframes wave-move {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-
-        /* Kontainer untuk kucing GIF */
-        .cat {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(calc(-50% - 8vw)); 
-            width: 120px; /* Lebar disesuaikan untuk GIF */
-            height: 120px; /* Tinggi disesuaikan untuk GIF */
-        }
-        
-        .cat img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Memastikan GIF tidak gepeng */
-        }
-        
-        /* Es Krim Stroberi (Kontainer SVG) */
-        .ice-cream {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(calc(-50% + 8vw));
-            width: 80px; /* Lebar disesuaikan untuk SVG */
-            height: 160px; /* Tinggi disesuaikan untuk SVG */
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .ice-cream:hover {
-            transform: translateX(calc(-50% + 8vw)) scale(1.1);
-        }
-        /* Membuat SVG mengisi kontainer */
-        .ice-cream svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Teks Petunjuk */
-        .instruction {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            text-shadow: 1px 1px 5px #000;
-            font-size: 1.5em;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-        .instruction.visible {
-            opacity: 1;
-        }
-
-        /* Kontainer untuk pesan di langit */
-        .sky-message {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-family: 'Caveat', cursive;
-            font-size: 3em;
-            text-align: center;
-            width: 80%;
-            text-shadow: 0 0 10px #f8bbd0, 0 0 20px #f8bbd0;
-        }
-        .sky-message span {
-            opacity: 0;
-            display: inline-block;
-            animation: fadeInWord 1.5s forwards;
-        }
-
-        @keyframes fadeInWord {
-            to { opacity: 1; }
-        }
-
-        /* Tombol Reset */
-        .reset-button {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: none;
-            border: 2px solid #ffafcc;
-            color: #ffafcc;
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1em;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s ease;
-        }
-        .reset-button.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        .reset-button:hover {
-            background-color: #ffafcc;
-            color: #1a1423;
-        }
-        
-        /* State saat pesan muncul */
-        .scene.message-active .foreground,
-        .scene.message-active .instruction {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .scene.message-active .foreground {
-            transform: translateY(100%);
-        }
-
     </style>
 </head>
 <body>
-
-    <div class="scene" id="scene">
-        <div class="moon"></div>
-        <div id="star-container"></div>
-        <div class="sea">
-            <div class="wave"></div>
+    <div id="stars" class="stars"></div>
+    <div class="sea">
+        <div class="wave"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+    </div>
+    
+    <div class="container">
+        <div class="icon-trigger" id="trigger">
+            <img src="https://ik.imagekit.io/notargazyu/ayayaya/tobbycat.gif" alt="Cute Cat">
         </div>
-        <div class="foreground" id="foreground">
-            <div class="cat">
-                <!-- Menggunakan GIF dari URL BARU -->
-                <img src="https://media.tenor.com/laUPAXXjuZcAAAAi/cats-white-cat.gif" alt="Kucing lucu di pantai">
+        <div class="message-container" id="messageContainer">
+            <div class="message" id="message">
+                <span>Hai kamu! ✨</span><br>
+                <span>Aku tahu kamu suka kucing 🐱</span><br>
+                <span>es krim yang lembut 🍦</span><br>
+                <span>langit malam di pantai yang indah 🌌</span><br>
+                <span>dan warna pink yang manis 💗</span><br><br>
+                <span>Semoga harimu seindah langit malam yang kamu suka,</span><br>
+                <span>semanis es krim favoritmu,</span><br>
+                <span>dan sehangat pelukan kucing kesayanganmu.</span><br><br>
+                <span>Jangan lupa tersenyum hari ini! 💖</span>
             </div>
-            <div class="ice-cream" id="ice-cream">
-                <!-- KODE SVG ES KRIM YANG BARU -->
-                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 255 512.875"><path fill="#CB8E66" d="M157.309 381.242v101.825c0 16.395-13.413 29.808-29.808 29.808h-.002c-16.395 0-29.808-13.413-29.808-29.808V381.242h59.618z"/><path fill="#E29E71" d="M105.135 502.719c-4.627-5.256-7.444-12.14-7.444-19.652V381.242h50.954v95.026c0 16.395-13.414 29.808-29.808 29.808h-.003a29.535 29.535 0 01-13.699-3.357z"/><path fill="#EF649D" d="M62.886 0h129.228C226.702 0 255 28.304 255 62.886v255.469c0 34.583-28.304 62.887-62.886 62.887H62.886C28.304 381.242 0 352.943 0 318.355V62.886C0 28.298 28.298 0 62.886 0z"/><path fill="#D75A8D" d="M62.886 0h129.228C226.702 0 255 28.299 255 62.886v38.529a5.978 5.978 0 01-3.651-1.238l-.451-.25c-1.395-.727-2.993-.829-4.566-.295-1.985.674-4.004 2.281-5.782 4.85a22.346 22.346 0 00-1.422 2.354l.019.01c-.761 1.462-1.414 2.905-2.06 4.341-2.801 6.203-5.568 12.329-12.437 15.683-13.059 6.376-22.103-5.718-27.999-17.795-1.838-3.767-3.41-7.66-4.611-10.639l-1.048-2.588c-1.923-4.546-3.972-8.884-6.311-12.058-1.698-2.305-3.452-3.864-5.254-4.055l-.048-.005c-.923-.055-2.047.676-3.457 2.387-2.443 2.964-4.967 7.98-7.659 15.444l.02.007c-2.692 7.539-6.319 13.319-10.436 17.4-4.896 4.853-10.508 7.347-16.195 7.613-26.93 1.257-27.85-25.688-28.518-45.335-.116-3.457-.227-6.643-.507-9.283-.717-6.735-1.968-13.316-4.095-18.06-1.485-3.311-3.279-5.518-5.417-5.556-.715-.013-1.371.424-1.983 1.219l-.187.23c-1.169 1.649-2.14 4.225-2.981 7.501-.935 3.639-1.689 8.756-2.494 14.226-.948 6.439-1.969 13.365-3.688 20.058-1.023 3.988-2.282 7.778-3.897 11.145-1.761 3.67-3.956 6.873-6.73 9.36-2.006 1.799-4.288 3.18-6.886 4.043-2.569.856-5.367 1.176-8.414.869-6.309-.639-12.122-4.425-15.961-11.184-3.01-5.299-4.799-12.52-4.502-21.493.128-3.876.297-7.557.467-11.297 1.186-26.023 2.525-55.418-10.649-56.94a5.981 5.981 0 01-4.595-3.109A62.368 62.368 0 0162.886 0z"/><path fill="#D75A8D" d="M173.607 82.271h7.948c7.428 0 13.507 6.08 13.507 13.507v189.686c0 7.428-6.08 13.508-13.507 13.508h-7.948c-7.427 0-13.508-6.078-13.508-13.508V95.778c0-7.429 6.078-13.507 13.508-13.507zm-100.163 0h7.948c7.428 0 13.508 6.08 13.508 13.507v189.686c0 7.428-6.081 13.508-13.508 13.508h-7.948c-7.427 0-13.508-6.078-13.508-13.508V95.778c0-7.429 6.08-13.507 13.508-13.507z"/><path fill="#F5B1C6" d="M62.886 0h129.228C226.702 0 255 28.299 255 62.886v32.527c-6.596-4.567-15.725-1.79-21.174 8.667-3.393 6.513-5.389 14.267-11.802 17.398-13.103 6.398-22.058-19.756-25.524-27.951-4.176-9.868-8.986-18.954-16.44-19.746-5.993-.635-11.55 5.48-17.426 21.771-4.965 13.902-13.141 20.673-21.24 21.052-25.338 1.182-21.133-33.499-22.813-49.274-1.549-14.539-5.561-28.782-15.372-28.961-5.606-.103-8.879 5.059-11.035 13.452-2.266 8.817-3.189 22.632-6.182 34.283-1.862 7.26-4.528 13.68-8.823 17.528-2.829 2.537-6.331 3.858-10.727 3.412-8.3-.842-15.62-9.95-15.071-26.535C52.386 49.847 57.126 8.584 35.89 6.13A62.288 62.288 0 0162.886 0z"/></svg>
-            </div>
         </div>
-        
-        <div class="instruction" id="instruction">
-            <p>Klik es krimnya!</p>
-        </div>
-
-        <div class="sky-message" id="sky-message"></div>
-        <button class="reset-button" id="reset-button">Lihat Lagi</button>
     </div>
 
     <script>
-        const scene = document.getElementById('scene');
-        const starContainer = document.getElementById('star-container');
-        const iceCream = document.getElementById('ice-cream');
-        const skyMessage = document.getElementById('sky-message');
-        const resetButton = document.getElementById('reset-button');
-        const instruction = document.getElementById('instruction');
-        
-        let isAnimating = false; // Flag untuk mencegah klik ganda
-        let shootingStarInterval; // Variabel untuk interval bintang jatuh
+        // Membuat bintang-bintang
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 200;
 
-        // --- Ganti Pesanmu di Sini ---
-        const message = "Setiap momen denganmu lebih manis dari es krim stroberi ini.";
-
-        // Membuat bintang statis secara acak
-        function createStaticStars() {
-            starContainer.innerHTML = ''; // Hapus bintang lama
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < numberOfStars; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                star.style.width = `${Math.random() * 3}px`;
-                star.style.height = star.style.width;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.animationDelay = `${Math.random() * 2}s`;
-                starContainer.appendChild(star);
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 2;
+                
+                // Random twinkle duration
+                const duration = 3 + Math.random() * 3;
+                
+                star.style.cssText = `
+                    left: ${x}%;
+                    top: ${y}%;
+                    width: ${size}px;
+                    height: ${size}px;
+                    --duration: ${duration}s;
+                `;
+                
+                starsContainer.appendChild(star);
             }
         }
 
-        // [KODE BARU] Membuat satu bintang jatuh
+        // Membuat bintang jatuh
         function createShootingStar() {
             const star = document.createElement('div');
             star.className = 'shooting-star';
             
-            // Atur posisi awal dan durasi acak
-            star.style.top = `${Math.random() * 60}%`;
-            star.style.animationDuration = `${2 + Math.random() * 2}s`;
+            // Atur posisi awal dan durasi secara acak untuk variasi
+            star.style.top = `${Math.random() * 60}%`; // Muncul di 60% area atas layar
+            const duration = 2 + Math.random() * 2; // Durasi antara 2 sampai 4 detik
+            star.style.animationDuration = `${duration}s`;
             
-            scene.appendChild(star);
+            document.body.appendChild(star);
             
-            // Hapus elemen setelah animasi selesai
-            const animationDuration = parseFloat(star.style.animationDuration) * 1000;
+            // Hapus elemen bintang setelah animasi selesai
             setTimeout(() => {
                 star.remove();
-            }, animationDuration);
+            }, duration * 1000);
         }
 
-        // [KODE BARU] Memulai interval bintang jatuh
+        // Fungsi untuk memulai animasi bintang jatuh
+        let shootingStarInterval;
         function startShootingStars() {
-            stopShootingStars(); // Hentikan interval lama jika ada
+            // Hentikan interval lama jika ada
+            clearInterval(shootingStarInterval);
+            // Buat bintang jatuh baru setiap 1.8 detik
             shootingStarInterval = setInterval(createShootingStar, 1800);
         }
 
-        // [KODE BARU] Menghentikan interval bintang jatuh
-        function stopShootingStars() {
-            clearInterval(shootingStarInterval);
-            const existingShootingStars = document.querySelectorAll('.shooting-star');
-            existingShootingStars.forEach(s => s.remove());
-        }
-
-        // Menampilkan pesan kata per kata
-        function showMessage() {
-            skyMessage.innerHTML = '';
-            const words = message.split(' ');
-            words.forEach((word, index) => {
-                const wordSpan = document.createElement('span');
-                wordSpan.textContent = word + ' ';
-                wordSpan.style.animationDelay = `${index * 1}s`;
-                skyMessage.appendChild(wordSpan);
+        // Animasi text
+        function animateMessage() {
+            const spans = document.querySelectorAll('.message span');
+            spans.forEach((span, index) => {
+                setTimeout(() => {
+                    span.style.animation = 'fadeIn 0.5s ease-out forwards';
+                }, index * 200);
             });
-            
-            const totalAnimationTime = words.length * 1000;
-            setTimeout(() => {
-                resetButton.classList.add('visible');
-                isAnimating = false;
-            }, totalAnimationTime);
         }
 
-        // Event listener untuk es krim
-        iceCream.addEventListener('click', () => {
-            if (isAnimating) return;
-            isAnimating = true;
+        // Event listener untuk icon trigger
+        document.getElementById('trigger').addEventListener('click', function() {
+            const messageContainer = document.getElementById('messageContainer');
+            const message = document.getElementById('message');
             
-            scene.classList.add('message-active');
-            instruction.classList.remove('visible');
-            showMessage();
-            startShootingStars();
+            if (!messageContainer.classList.contains('visible')) {
+                messageContainer.classList.add('visible');
+                setTimeout(() => {
+                    message.classList.add('visible');
+                    animateMessage();
+                    // Mulai animasi bintang jatuh setelah pesan muncul
+                    startShootingStars();
+                }, 500);
+                
+                // Ganti icon setelah diklik
+                const img = this.querySelector('img');
+                img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbylove.gif';
+                setTimeout(() => {
+                    img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
+                }, 5000);
+            }
         });
 
-        // Event listener untuk tombol reset
-        resetButton.addEventListener('click', () => {
-            scene.classList.remove('message-active');
-            resetButton.classList.remove('visible');
-            skyMessage.innerHTML = '';
-            stopShootingStars();
-            
-            setTimeout(() => {
-                instruction.classList.add('visible');
-            }, 1500);
-        });
-
-        // Inisialisasi
-        createStaticStars();
-        setTimeout(() => {
-            instruction.classList.add('visible');
-        }, 1000);
+        // Inisialisasi bintang saat halaman dimuat
+        createStars();
     </script>
-
 </body>
 </html>
