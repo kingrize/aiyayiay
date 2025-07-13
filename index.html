@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pesan Untukmu</title>
+    <title>Jiya: for Aiya</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -17,29 +17,22 @@
         
         .floating-lyrics {
             position: fixed;
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            pointer-events: none;
-            opacity: 0;
-            transform: translateX(-50%);
-            transition: all 0.5s ease-out;
-            text-align: center;
-            width: auto;
-            max-width: 90%;
-            padding: 8px 15px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
-            white-space: nowrap;
-            z-index: 5;
             left: 50%;
             bottom: 10%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            white-space: nowrap;
         }
 
         .floating-lyrics.visible {
             opacity: 1;
-            color: rgba(255, 255, 255, 0.9);
         }
 
         .stars {
@@ -550,9 +543,129 @@
                 transform: translateY(0);
             }
         }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #001220 0%, #001f36 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-animation {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .loading-heart {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://ik.imagekit.io/notargazyu/ayayaya/tobbycat.gif') center/contain no-repeat;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 0.9em;
+            white-space: nowrap;
+            opacity: 0.8;
+        }
+
+        /* Smooth page transitions */
+        .message-page {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+
+        .message-page[style*="block"] {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hover effects for buttons */
+        .nav-button, .gallery-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-button:hover, .gallery-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Emoji Rain Styles */
+        .emoji {
+            position: fixed;
+            top: -20px;
+            font-size: 24px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1000;
+            animation: emojiRain linear;
+        }
+
+        @keyframes emojiRain {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Watermark Styles */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            z-index: 9999;
+            transform: rotate(-45deg);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
     </style>
 </head>
 <body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-animation">
+            <div class="loading-heart"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
     <div id="stars" class="stars"></div>
     <div class="sea">
         <div class="wave"></div>
@@ -562,15 +675,13 @@
     
     <audio id="bgMusic" preload="auto">
         <source src="https://github.com/kingrize/aiyayiay/raw/refs/heads/main/song/do_you_think_you_could_love_me.mp3" type="audio/mp3">
-        <source src="./song/do_you_think_you_could_love_me.mp3" type="audio/mp3">
     </audio>
     
     <div class="popup-overlay" id="galleryOverlay">
         <div class="gallery-popup">
             <button class="close-button" id="closeGallery">×</button>
             <div class="gallery-grid" id="galleryGrid">
-                <!-- Gallery items akan ditambahkan melalui JavaScript -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -581,28 +692,84 @@
         <div class="message-container" id="messageContainer">
             <div class="message" id="message">
                 <div class="message-page" data-page="1">
-                    <span>Hai kamu! ✨</span><br>
-                    <span>Aku punya beberapa pesan spesial untukmu...</span><br>
-                    <span>Mau tau apa aja? 💝</span><br>
+                    <span>Hey Aiya✨</span><br>
+                    <span>Jiya here.</span><br>
+                    <span>I want to tell you something important...</span><br>
                 </div>
                 <div class="message-page" data-page="2" style="display: none;">
-                    <span>Aku tahu kamu suka kucing 🐱</span><br>
-                    <span>es krim yang lembut 🍦</span><br>
-                    <span>langit malam di pantai yang indah 🌌</span><br>
-                    <span>dan warna pink yang manis 💗</span><br>
+                    <span>Thank you for trusting me with your story</span><br>
+                    <span>Seriously...</span><br>
+                    <span>It takes incredible courage to open up like that</span><br>
                 </div>
                 <div class="message-page" data-page="3" style="display: none;">
-                    <span>Di malam yang tenang ini...</span><br>
-                    <span>Aku ingin kamu tahu bahwa...</span><br>
-                    <span>Kamu adalah orang yang spesial! ⭐</span><br>
-                    <span>Yang selalu membuat orang lain tersenyum 😊</span><br>
+                    <span>I feel so honored</span><br>
+                    <span>that you felt safe enough</span><br>
+                    <span>to share that piece of your heart with me</span><br>
                 </div>
                 <div class="message-page" data-page="4" style="display: none;">
-                    <span>Semoga harimu seindah langit malam yang kamu suka,</span><br>
-                    <span>semanis es krim favoritmu,</span><br>
-                    <span>dan sehangat pelukan kucing kesayanganmu.</span><br><br>
-                    <span>Jangan lupa tersenyum hari ini! 💖</span><br>
-                    <button class="gallery-button" id="openGallery" style="display: none;">Lihat Gallery Kucing 🐱</button>
+                    <span>Hearing everything you've been through—</span><br>
+                    <span>your past, the pain,</span><br>
+                    <span>the things that still weigh on you</span><br>
+                </div>
+                <div class="message-page" data-page="5" style="display: none;">
+                    <span>it's like a puzzle piece just clicked into place</span><br>
+                    <span>It helps me understand you</span><br>
+                    <span>on a completely different, much deeper level</span><br>
+                </div>
+                <div class="message-page" data-page="6" style="display: none;">
+                    <span>And you know what?</span><br>
+                    <span>All those experiences,</span><br>
+                    <span>as hard and as unfair as they were</span><br>
+                    <span>they've shaped the person you are today</span><br>
+                </div>
+                <div class="message-page" data-page="7" style="display: none;">
+                    <span>The way you see the world,</span><br>
+                    <span>your sensitivity, your depth,</span><br>
+                    <span>even the little quirks in your personality</span><br>
+                </div>
+                <div class="message-page" data-page="8" style="display: none;">
+                    <span>I don't see them as baggage</span><br>
+                    <span>or something 'wrong' with you</span><br>
+                    <span>Far from it.</span><br>
+                    <span>They are a part of your journey</span><br>
+                </div>
+                <div class="message-page" data-page="9" style="display: none;">
+                    <span>And I want you to know,</span><br>
+                    <span>I genuinely like that part of you</span><br>
+                    <span>I like the person you are,</span><br>
+                    <span>right here, right now</span><br>
+                </div>
+                <div class="message-page" data-page="10" style="display: none;">
+                    <span>Everything you feel is so incredibly valid</span><br>
+                    <span>So please, don't ever let anyone,</span><br>
+                    <span>including yourself,</span><br>
+                    <span>make you feel otherwise</span><br>
+                </div>
+                <div class="message-page" data-page="11" style="display: none;">
+                    <span>When I look at you,</span><br>
+                    <span>I don't see someone who is broken;</span><br>
+                    <span>I see someone who has survived so much</span><br>
+                </div>
+                <div class="message-page" data-page="12" style="display: none;">
+                    <span>I see your strength,</span><br>
+                    <span>even in the moments</span><br>
+                    <span>you might feel weak</span><br>
+                </div>
+                <div class="message-page" data-page="13" style="display: none;">
+                    <span>So please, let yourself breathe</span><br>
+                    <span>Know that you don't have to carry</span><br>
+                    <span>all of that weight alone anymore</span><br>
+                </div>
+                <div class="message-page" data-page="14" style="display: none;">
+                    <span>I'm here, and I truly, deeply care about you</span><br>
+                    <span>That's not just something I'm saying</span><br>
+                    <span>I mean it. It's okay. I get it</span><br>
+                </div>
+                <div class="message-page" data-page="15" style="display: none;">
+                    <span>I'm not going anywhere</span><br>
+                    <span>I'm on your side,</span><br>
+                    <span>today, tomorrow, and always 💝</span><br>
+                    <button class="gallery-button" id="openGallery" style="display: none;">Open Gallery 🌟</button>
                 </div>
             </div>
             <div class="nav-buttons" id="messageNav">
@@ -615,11 +782,9 @@
         </button>
     </div>
 
-    <!-- Sudah tidak diperlukan karena duplikat -->
-    
+    <div class="watermark">Created by Jiya</div>
 
     <script>
-        // Membuat bintang-bintang
         function createStars() {
             const starsContainer = document.getElementById('stars');
             const numberOfStars = 200;
@@ -628,14 +793,9 @@
                 const star = document.createElement('div');
                 star.className = 'star';
                 
-                // Random position
                 const x = Math.random() * 100;
                 const y = Math.random() * 100;
-                
-                // Random size
                 const size = Math.random() * 2;
-                
-                // Random twinkle duration
                 const duration = 3 + Math.random() * 3;
                 
                 star.style.cssText = `
@@ -655,29 +815,22 @@
             const star = document.createElement('div');
             star.className = 'shooting-star';
             
-            // Atur posisi awal dan durasi secara acak untuk variasi
-            star.style.top = `${Math.random() * 60}%`; // Muncul di 60% area atas layar
-            const duration = 2 + Math.random() * 2; // Durasi antara 2 sampai 4 detik
+            star.style.top = `${Math.random() * 60}%`;
+            const duration = 2 + Math.random() * 2;
             star.style.animationDuration = `${duration}s`;
             
             document.body.appendChild(star);
             
-            // Hapus elemen bintang setelah animasi selesai
             setTimeout(() => {
                 star.remove();
             }, duration * 1000);
         }
 
-        // Fungsi untuk memulai animasi bintang jatuh
         let shootingStarInterval;
         function startShootingStars() {
-            // Hentikan interval lama jika ada
             clearInterval(shootingStarInterval);
-            // Buat bintang jatuh baru setiap 1.8 detik
             shootingStarInterval = setInterval(createShootingStar, 1800);
         }
-
-        // Animasi text untuk halaman yang aktif
         function animateMessage(page) {
             const spans = page.querySelectorAll('span');
             spans.forEach((span, index) => {
@@ -690,49 +843,84 @@
 
         // Navigasi pesan
         let currentPage = 1;
-        const totalPages = 4;
+        const totalPages = 15;
 
         let isAnimating = false;
 
         function updateNavigation() {
-            if (isAnimating) return;
-            isAnimating = true;
-
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const galleryBtn = document.getElementById('openGallery');
             
+            // Update navigation buttons
             prevBtn.disabled = currentPage === 1;
             nextBtn.disabled = currentPage === totalPages;
             
+            // Get old and new pages
             const oldPage = document.querySelector('.message-page[style*="block"]');
             const newPage = document.querySelector(`.message-page[data-page="${currentPage}"]`);
             
             if (oldPage) {
-                oldPage.style.display = 'none';
+                oldPage.style.opacity = '0';
+                oldPage.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    oldPage.style.display = 'none';
+                    newPage.style.display = 'block';
+                    
+                    requestAnimationFrame(() => {
+                        newPage.style.opacity = '1';
+                        newPage.style.transform = 'translateY(0)';
+                        animateMessage(newPage);
+                    });
+                }, 300);
+            } else {
+                newPage.style.display = 'block';
+                requestAnimationFrame(() => {
+                    newPage.style.opacity = '1';
+                    newPage.style.transform = 'translateY(0)';
+                    animateMessage(newPage);
+                });
             }
             
-            newPage.style.display = 'block';
-            animateMessage(newPage);
-            
-            // Enable buttons after animation completes
-            setTimeout(() => {
-                isAnimating = false;
-            }, 300);
-
-            // Tampilkan tombol gallery hanya di halaman terakhir
+            // Handle gallery button visibility
             if (galleryBtn) {
                 if (currentPage === totalPages) {
                     galleryBtn.style.display = 'inline-block';
                     setTimeout(() => {
                         galleryBtn.classList.add('visible');
-                    }, 1000);
+                    }, 500);
                 } else {
-                    galleryBtn.style.display = 'none';
                     galleryBtn.classList.remove('visible');
+                    setTimeout(() => {
+                        galleryBtn.style.display = 'none';
+                    }, 300);
                 }
             }
         }
+
+        // Update event listeners for navigation
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (!isAnimating && currentPage > 1) {
+                isAnimating = true;
+                currentPage--;
+                updateNavigation();
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 500);
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (!isAnimating && currentPage < totalPages) {
+                isAnimating = true;
+                currentPage++;
+                updateNavigation();
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 500);
+            }
+        });
 
         // Gallery functionality
         const galleryOverlay = document.getElementById('galleryOverlay');
@@ -816,25 +1004,10 @@
             }
         });
 
-        // Event listeners untuk tombol navigasi
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                updateNavigation();
-            }
-        });
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateNavigation();
-            }
-        });
-
         // Lyrics data
         const lyrics = [
-            { time: 1, text: "Hii, Yara Biuu here "},
-            { time: 15, text: "Jiya is my middle name hehe" },
+            { time: 1, text: "Aiyayayayaaa aloo"},
+            { time: 15, text: "Jiya here...." },
             { time: 28, text: "Beautiful sight, I see when I sleep" },
             { time: 34, text: "You under streetlights, waiting for me" },
             { time: 43, text: "Hold my hand" },
@@ -860,8 +1033,8 @@
             { time: 168, text: "And I'll show you what makes you lovely" },
             { time: 176, text: "I love you to the stars and back" },
             { time: 182, text: "Give me your heart and I'll give you mine" },
-            { time: 190, text: "I LOVE YOU YaraAA!" },
-            { time: 195, text: "YaRaAraRAraRAraa" }
+            { time: 190, text: "Live life fully" },
+            { time: 195, text: "Okay? hehe" }
         ];
 
         // Music and lyrics functionality
@@ -871,8 +1044,8 @@
         let currentLyricIndex = 0;
 
         function updateLyrics() {
-            if (!musicStarted) return;
-
+            if (!musicStarted || !bgMusic.duration) return;
+            
             const currentTime = Math.floor(bgMusic.currentTime);
             
             // Check all lyrics that need to be displayed
@@ -880,45 +1053,51 @@
                 const currentLyric = lyrics[currentLyricIndex];
                 const nextLyric = lyrics[currentLyricIndex + 1];
                 
-                // If current time is past the lyric time but before next lyric
                 if (currentTime >= currentLyric.time && (!nextLyric || currentTime < nextLyric.time)) {
-                    // Create a new lyrics container
-                    const newLyricElement = document.createElement('div');
-                    newLyricElement.className = 'floating-lyrics';
-                    document.body.appendChild(newLyricElement);
-
-                    // Set content and position at bottom
-                    newLyricElement.style.bottom = '10%';
-                    newLyricElement.textContent = currentLyric.text;
-                    newLyricElement.style.transform = 'translateX(-50%)';
+                    // Create floating lyrics element
+                    const lyricElement = document.createElement('div');
+                    lyricElement.className = 'floating-lyrics';
+                    lyricElement.textContent = currentLyric.text;
                     
-                    // Show lyric with animation
+                    // Set initial position and style
+                    lyricElement.style.left = '50%';
+                    lyricElement.style.bottom = '10%';
+                    lyricElement.style.transform = 'translateX(-50%)';
+                    lyricElement.style.opacity = '0';
+                    
+                    document.body.appendChild(lyricElement);
+                    
+                    // Trigger animation
                     requestAnimationFrame(() => {
-                        newLyricElement.classList.add('visible');
+                        lyricElement.style.opacity = '1';
+                        lyricElement.classList.add('visible');
                     });
-
-                    // Calculate display duration based on next lyric
+                    
+                    // Calculate display duration
                     const displayDuration = nextLyric 
                         ? (nextLyric.time - currentLyric.time) * 1000 
                         : 4000;
-
-                    // Remove after appropriate duration
+                    
+                    // Remove after duration
                     setTimeout(() => {
-                        newLyricElement.style.transition = 'all 0.5s ease-out';
-                        newLyricElement.style.opacity = '0';
+                        lyricElement.style.opacity = '0';
                         setTimeout(() => {
-                            newLyricElement.remove();
+                            if (lyricElement.parentNode) {
+                                lyricElement.remove();
+                            }
                         }, 500);
-                    }, Math.min(displayDuration, 4000)); // Cap at 4 seconds maximum
-
+                    }, Math.min(displayDuration, 4000));
+                    
                     currentLyricIndex++;
                 } else {
-                    break; // Wait for next timing check
+                    break;
                 }
             }
-
-            // Continue checking
-            requestAnimationFrame(updateLyrics);
+            
+            // Continue checking if music is still playing
+            if (!bgMusic.paused) {
+                requestAnimationFrame(updateLyrics);
+            }
         }
 
         // Add event listener for when music ends
@@ -997,7 +1176,7 @@
             const imgElement = document.createElement('img');
             imgElement.src = imageSrc;
             imgElement.alt = 'Gallery Image';
-            imgElement.loading = 'lazy'; // Untuk performa yang lebih baik
+            imgElement.loading = 'lazy';
             
             // Tambahkan gambar ke container
             itemContainer.appendChild(imgElement);
@@ -1011,8 +1190,7 @@
             galleryGrid.appendChild(itemContainer);
         });
 
-        // Event listener untuk membuka galeri sudah ditangani di atas dengan showGallery()
-        // Event listener untuk menutup galeri sudah ditangani di atas dengan hideGallery()
+        
 
         // Membuka gambar dalam popup saat diklik
         function openImageInPopup(imageSrc) {
@@ -1023,13 +1201,13 @@
             img.src = imageSrc;
             img.alt = 'Popup Image';
 
-            // Menambahkan efek fadeIn pada gambar popup
+            
             img.style.animation = 'fadeIn 0.5s ease-out';
 
             popup.appendChild(img);
             document.body.appendChild(popup);
 
-            // Menutup popup saat diklik
+            
             popup.addEventListener('click', () => {
                 popup.remove();
             });
@@ -1043,7 +1221,7 @@
             });
         });
 
-        // Add this at the start of your JavaScript code
+        
 function initializeAudio() {
     bgMusic.addEventListener('loadeddata', () => {
         console.log('Audio loaded successfully');
@@ -1053,12 +1231,158 @@ function initializeAudio() {
         console.error('Audio loading error:', e);
     });
 
-    // Force reload audio
+    
     bgMusic.load();
 }
 
-// Call initializeAudio when the page loads
+
 window.addEventListener('load', initializeAudio);
+
+        
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500); 
+        });
+
+        
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('fade-out');
+            
+            
+            setTimeout(() => {
+                loadingScreen.remove();
+            }, 500); 
+        });
+
+        // Emoji Rain functionality
+        const emojis = ['💖', '🍓', '💕', '🍧', '✨', '💝', '🎀', '🌸', '🐱', '💗'];
+        let emojiRainInterval;
+        let isFirstClick = true;
+        let canTriggerEmojis = false;
+
+        function createEmoji() {
+            const emoji = document.createElement('div');
+            emoji.className = 'emoji';
+            
+            // Set random position from top of screen
+            emoji.style.left = `${Math.random() * 100}vw`;
+            emoji.style.top = '-20px';
+            
+            // Random emoji
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Random size between 20px and 40px
+            const size = 20 + Math.random() * 20;
+            emoji.style.fontSize = `${size}px`;
+            
+            // Random duration between 2s and 4s
+            const duration = 2 + Math.random() * 2;
+            emoji.style.animationDuration = `${duration}s`;
+            
+            document.body.appendChild(emoji);
+            
+            // Cleanup after animation
+            setTimeout(() => {
+                if (emoji && emoji.parentNode) {
+                    emoji.remove();
+                }
+            }, duration * 1000);
+        }
+
+        function startEmojiRain() {
+            console.log('Starting emoji rain...');
+            
+            // Stop any existing rain
+            if (emojiRainInterval) {
+                clearInterval(emojiRainInterval);
+                emojiRainInterval = null;
+            }
+            
+            // Initial burst
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createEmoji, i * 50);
+            }
+            
+            // Continuous rain
+            emojiRainInterval = setInterval(createEmoji, 100);
+            
+            // Stop after 3 seconds
+            setTimeout(() => {
+                if (emojiRainInterval) {
+                    clearInterval(emojiRainInterval);
+                    emojiRainInterval = null;
+                }
+            }, 3000);
+        }
+
+        // Main click handler
+        const triggerElement = document.getElementById('trigger');
+        triggerElement.addEventListener('click', async function() {
+            const messageContainer = document.getElementById('messageContainer');
+            const message = document.getElementById('message');
+            const messageNav = document.getElementById('messageNav');
+            const img = this.querySelector('img');
+            
+            if (isFirstClick) {
+                isFirstClick = false;
+                messageContainer.classList.add('visible');
+                
+                // Try to play music immediately
+                try {
+                    await bgMusic.play();
+                    bgMusic.volume = 0.5;
+                    musicStarted = true;
+                    currentLyricIndex = 0;
+                    updateLyrics();
+                } catch (error) {
+                    console.error('Initial playback failed:', error);
+                    // Retry after user interaction
+                    const playPromise = bgMusic.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            bgMusic.volume = 0.5;
+                            musicStarted = true;
+                            currentLyricIndex = 0;
+                            updateLyrics();
+                        }).catch(err => console.error('Retry failed:', err));
+                    }
+                }
+
+                setTimeout(() => {
+                    message.classList.add('visible');
+                    messageNav.classList.add('visible');
+                    updateNavigation();
+                    startShootingStars();
+                }, 500);
+                
+                img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbylove.gif';
+                setTimeout(() => {
+                    img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
+                    canTriggerEmojis = true;
+                }, 5000);
+            } else if (canTriggerEmojis && img.src.includes('tabbycat_ok.gif')) {
+                startEmojiRain();
+            }
+        });
+
+        // Prevent right click and text selection
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        document.addEventListener('selectstart', (e) => e.preventDefault());
+        
+        // Disable keyboard shortcuts for copy/paste/etc
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && 
+                ['c', 'x', 'u', 's', 'p'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+                return false;
+            }
+        });
     </script>
 </body>
 </html>
