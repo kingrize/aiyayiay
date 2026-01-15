@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Surat Ulang Tahun 💌</title>
+        <title>Jiya: happy birthday sayang.</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -193,7 +193,6 @@
                 border: 1px solid var(--edge);
                 border-radius: 18px;
                 overflow: hidden;
-
                 transform: translateY(26px);
                 opacity: 0;
                 transition:
@@ -494,10 +493,16 @@
                 filter: blur(2px);
             }
         </style>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
     </head>
 
     <body>
-        <div class="wrap">
+        <div class="wrap" id="captureRoot">
             <div class="envelope" id="envelope">
                 <div class="floaties" id="floaties" aria-hidden="true"></div>
 
@@ -599,7 +604,7 @@
                         <div class="btns">
                             <button id="btnClose" class="primary">Tutup</button>
                             <button id="btnCrayon">🍰 Gift</button>
-                            <button onclick="window.print()">📷</button>
+                            <button id="btnShot">📸</button>
                         </div>
                     </div>
                 </div>
@@ -626,6 +631,8 @@
             const typedViewport = document.getElementById("typedViewport");
             const sealOpen = document.getElementById("sealOpen");
             const footerSign = document.getElementById("footerSign");
+            const captureRoot = document.getElementById("captureRoot");
+            const btnShot = document.getElementById("btnShot");
 
             const bgm = document.getElementById("bgm");
             bgm.loop = true;
@@ -822,6 +829,55 @@
                 resetToHidden();
             }
 
+            async function takeScreenshot() {
+                if (!window.html2canvas) return;
+
+                const oldText = btnShot.textContent;
+                btnShot.disabled = true;
+                btnShot.textContent = "⏳";
+
+                try {
+                    if (document.fonts && document.fonts.ready) {
+                        await document.fonts.ready;
+                    }
+
+                    const prevScroll = { x: window.scrollX, y: window.scrollY };
+                    window.scrollTo(0, 0);
+                    await new Promise((r) => setTimeout(r, 120));
+
+                    const canvas = await html2canvas(document.body, {
+                        useCORS: true,
+                        allowTaint: false,
+                        backgroundColor: null,
+                        scale: Math.max(
+                            2,
+                            Math.floor(window.devicePixelRatio || 1),
+                        ),
+                        windowWidth: document.documentElement.scrollWidth,
+                        windowHeight: document.documentElement.scrollHeight,
+                        scrollX: 0,
+                        scrollY: 0,
+                    });
+
+                    window.scrollTo(prevScroll.x, prevScroll.y);
+
+                    const dataUrl = canvas.toDataURL("image/png", 1.0);
+                    const a = document.createElement("a");
+                    const ts = new Date();
+                    const pad = (n) => String(n).padStart(2, "0");
+                    const name = `jiya-letter-${ts.getFullYear()}-${pad(ts.getMonth() + 1)}-${pad(ts.getDate())}_${pad(ts.getHours())}${pad(ts.getMinutes())}.png`;
+                    a.href = dataUrl;
+                    a.download = name;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } catch (e) {
+                } finally {
+                    btnShot.disabled = false;
+                    btnShot.textContent = oldText;
+                }
+            }
+
             sealOpen.addEventListener("click", openLetter);
             sealOpen.addEventListener("keydown", (e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -833,6 +889,7 @@
             document
                 .getElementById("btnClose")
                 .addEventListener("click", closeLetter);
+            btnShot.addEventListener("click", takeScreenshot);
 
             const crayonLines = [
                 "I love youuuuu 🧡",
@@ -843,7 +900,6 @@
                 "aiyakuu <3",
                 "aku sayang kamuuuuu",
                 "i  l o v e  y o u",
-                
             ];
 
             document
@@ -890,4 +946,3 @@
         </script>
     </body>
 </html>
-
