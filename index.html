@@ -193,6 +193,7 @@
                 border: 1px solid var(--edge);
                 border-radius: 18px;
                 overflow: hidden;
+
                 transform: translateY(26px);
                 opacity: 0;
                 transition:
@@ -492,6 +493,11 @@
                 transform: scale(1);
                 filter: blur(2px);
             }
+
+            .btns button[disabled] {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
         </style>
 
         <script
@@ -561,7 +567,7 @@
                             <p data-type>Hai sayang 🤍</p>
                             <p data-type>Jiya a.k.a your boyfriend here!</p>
                             <p data-type>
-                                Selamat ulangtahun ya sayang! ummm... thank you
+                                Selamat ulang tahun ya sayang! ummm... thank you
                                 for staying:D There were days that felt heavy,
                                 days when you had to be strong even when you
                                 didn’t feel okay at all. And honestly, I just
@@ -604,7 +610,7 @@
                         <div class="btns">
                             <button id="btnClose" class="primary">Tutup</button>
                             <button id="btnCrayon">🍰 Gift</button>
-                            <button id="btnShot">📸</button>
+                            <button id="btnShot" disabled>📸</button>
                         </div>
                     </div>
                 </div>
@@ -631,7 +637,6 @@
             const typedViewport = document.getElementById("typedViewport");
             const sealOpen = document.getElementById("sealOpen");
             const footerSign = document.getElementById("footerSign");
-            const captureRoot = document.getElementById("captureRoot");
             const btnShot = document.getElementById("btnShot");
 
             const bgm = document.getElementById("bgm");
@@ -704,6 +709,7 @@
             function prepareForTyping() {
                 typedViewport.scrollTop = 0;
                 footerSign.classList.remove("show");
+                btnShot.disabled = true;
 
                 typedEls.forEach((el) => {
                     el.classList.add("typed-ready");
@@ -776,11 +782,13 @@
 
                 await new Promise((r) => setTimeout(r, 650));
                 footerSign.classList.add("show");
+                btnShot.disabled = false;
             }
 
             function resetToHidden() {
                 typedViewport.scrollTop = 0;
                 footerSign.classList.remove("show");
+                btnShot.disabled = true;
 
                 typedEls.forEach((el) => {
                     el.classList.remove("typed-ready");
@@ -836,13 +844,26 @@
                 btnShot.disabled = true;
                 btnShot.textContent = "⏳";
 
-                try {
-                    if (document.fonts && document.fonts.ready) {
-                        await document.fonts.ready;
-                    }
+                const tv = document.getElementById("typedViewport");
+                const prev = {
+                    tvMaxHeight: tv.style.maxHeight,
+                    tvOverflow: tv.style.overflow,
+                    tvPaddingRight: tv.style.paddingRight,
+                    tvScrollTop: tv.scrollTop,
+                    bodyOverflow: document.body.style.overflow,
+                };
 
-                    const prevScroll = { x: window.scrollX, y: window.scrollY };
-                    window.scrollTo(0, 0);
+                try {
+                    if (document.fonts && document.fonts.ready)
+                        await document.fonts.ready;
+
+                    document.body.style.overflow = "hidden";
+
+                    tv.scrollTop = 0;
+                    tv.style.maxHeight = "none";
+                    tv.style.overflow = "visible";
+                    tv.style.paddingRight = "0";
+
                     await new Promise((r) => setTimeout(r, 120));
 
                     const canvas = await html2canvas(document.body, {
@@ -853,26 +874,30 @@
                             2,
                             Math.floor(window.devicePixelRatio || 1),
                         ),
-                        windowWidth: document.documentElement.scrollWidth,
-                        windowHeight: document.documentElement.scrollHeight,
                         scrollX: 0,
                         scrollY: 0,
+                        windowWidth: document.documentElement.scrollWidth,
+                        windowHeight: document.documentElement.scrollHeight,
                     });
-
-                    window.scrollTo(prevScroll.x, prevScroll.y);
 
                     const dataUrl = canvas.toDataURL("image/png", 1.0);
                     const a = document.createElement("a");
+
                     const ts = new Date();
                     const pad = (n) => String(n).padStart(2, "0");
-                    const name = `jiya-letter-${ts.getFullYear()}-${pad(ts.getMonth() + 1)}-${pad(ts.getDate())}_${pad(ts.getHours())}${pad(ts.getMinutes())}.png`;
+                    a.download = `jiya-letter-${ts.getFullYear()}-${pad(ts.getMonth() + 1)}-${pad(ts.getDate())}_${pad(ts.getHours())}${pad(ts.getMinutes())}.png`;
                     a.href = dataUrl;
-                    a.download = name;
+
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
-                } catch (e) {
                 } finally {
+                    tv.style.maxHeight = prev.tvMaxHeight;
+                    tv.style.overflow = prev.tvOverflow;
+                    tv.style.paddingRight = prev.tvPaddingRight;
+                    tv.scrollTop = prev.tvScrollTop;
+                    document.body.style.overflow = prev.bodyOverflow;
+
                     btnShot.disabled = false;
                     btnShot.textContent = oldText;
                 }
