@@ -1,1388 +1,888 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jiya: for Aiya</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Quicksand', sans-serif;
-            color: #fff;
-            overflow: hidden;
-            background: linear-gradient(180deg, #001220 0%, #001f36 100%);
-        }
-        
-        .floating-lyrics {
-            position: fixed;
-            left: 50%;
-            bottom: 10%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 1.2em;
-            text-align: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            pointer-events: none;
-            white-space: nowrap;
-        }
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Surat Ulang Tahun 💌</title>
 
-        .floating-lyrics.visible {
-            opacity: 1;
-        }
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Short+Stack&display=swap"
+            rel="stylesheet"
+        />
 
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        
+        <link
+            rel="preload"
+            as="audio"
+            href="https://raw.githubusercontent.com/kingrize/aiyayiay/main/song/wildflower.mp3"
+            crossorigin="anonymous"
+        />
 
+        <link
+            rel="preload"
+            as="image"
+            href="https://raw.githubusercontent.com/kingrize/aiyayiay/main/img/aiya-pfp.jpg"
+            crossorigin="anonymous"
+        />
 
-        .sea {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 25%;
-            background: linear-gradient(to top, rgba(74,63,120,0.8), transparent);
-            opacity: 0.8;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 200%;
-            height: 100px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 100'%3E%3Cpath d='M0 50 C100 20, 200 80, 300 50 C400 20, 500 80, 600 50 C700 20, 800 80, 900 50 L900 100 L0 100 Z' fill='rgba(74,63,120,0.5)'/%3E%3C/svg%3E");
-            animation: wave-move 10s linear infinite;
-        }
-
-        .wave-2 {
-            animation: wave-move 7s linear infinite;
-            opacity: 0.6;
-        }
-
-        .wave-3 {
-            animation: wave-move 15s linear infinite;
-            opacity: 0.4;
-        }
-
-        @keyframes wave-move {
-            from {
-                transform: translateX(0);
+        <style>
+            :root {
+                --bg1: #fff7f0;
+                --bg2: #f6fbff;
+                --ink: #2c2a2a;
+                --muted: #6b6460;
+                --paper: #fffdf9;
+                --edge: #eadfda;
+                --stamp: #ffb3c7;
+                --accent: #ff6fa3;
+                --shadow: 0 18px 45px rgba(30, 20, 10, 0.1);
             }
-            to {
-                transform: translateX(-50%);
+            * {
+                box-sizing: border-box;
             }
-        }
+            body {
+                margin: 0;
+                min-height: 100svh;
+                font-family:
+                    "Nunito",
+                    system-ui,
+                    -apple-system,
+                    Segoe UI,
+                    Roboto,
+                    Arial,
+                    sans-serif;
+                color: var(--ink);
+                background:
+                    radial-gradient(
+                        900px 500px at 20% 10%,
+                        var(--bg2),
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        900px 500px at 80% 20%,
+                        #fff2f7,
+                        transparent 55%
+                    ),
+                    radial-gradient(
+                        900px 500px at 50% 90%,
+                        #fffbe9,
+                        transparent 60%
+                    ),
+                    linear-gradient(180deg, var(--bg1), #fff);
+                display: grid;
+                place-items: center;
+                padding: 24px;
+            }
+            .wrap {
+                width: min(900px, 100%);
+            }
 
-        .container {
-            position: relative;
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 32px;
-            text-align: center;
-            z-index: 3;
-        }
+            .envelope {
+                position: relative;
+                border-radius: 22px;
+                background: linear-gradient(180deg, #fff, #fffaf3);
+                box-shadow: var(--shadow);
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                overflow: hidden;
+                padding: 18px;
+            }
+            .envelope::before {
+                content: "";
+                position: absolute;
+                inset: -2px;
+                background: repeating-linear-gradient(
+                    45deg,
+                    rgba(255, 111, 163, 0.1) 0 10px,
+                    rgba(255, 216, 168, 0.1) 10px 20px,
+                    rgba(173, 216, 230, 0.1) 20px 30px
+                );
+                opacity: 0.55;
+                pointer-events: none;
+            }
 
-        .message-container {
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.5s ease-out;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 
-                0 4px 16px rgba(255, 182, 193, 0.2),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
+            .doodle {
+                position: absolute;
+                inset: 12px;
+                border-radius: 18px;
+                pointer-events: none;
+            }
+            .doodle svg {
+                width: 100%;
+                height: 100%;
+            }
+            .doodle path {
+                fill: none;
+                stroke: rgba(255, 111, 163, 0.45);
+                stroke-width: 3.2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-dasharray: 1 10;
+                filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.06));
+            }
 
-        .message-container.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
+            .seal {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 110px;
+                height: 110px;
+                border-radius: 28px;
+                background: radial-gradient(
+                    circle at 30% 30%,
+                    #fff,
+                    var(--stamp)
+                );
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow:
+                    0 18px 40px rgba(0, 0, 0, 0.12),
+                    0 0 0 14px rgba(255, 111, 163, 0.1);
+                display: grid;
+                place-items: center;
+                font-size: 44px;
+                cursor: pointer;
+                user-select: none;
+                z-index: 5;
+                animation: sealPulse 1.7s ease-in-out infinite;
+            }
+            .seal:active {
+                transform: translate(-50%, -50%) scale(0.98);
+            }
+            @keyframes sealPulse {
+                0%,
+                100% {
+                    filter: none;
+                }
+                50% {
+                    filter: brightness(1.04);
+                }
+            }
+            .is-open .seal {
+                display: none;
+            }
 
-        .nav-buttons {
-            position: absolute;
-            bottom: -60px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease-out;
-        }
+            .floaties {
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                overflow: hidden;
+                z-index: 1;
+            }
+            .floaties span {
+                position: absolute;
+                font-size: 18px;
+                opacity: 0.6;
+                animation: drift 10s linear infinite;
+                filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.08));
+            }
+            @keyframes drift {
+                from {
+                    transform: translateY(40px) translateX(0) rotate(0deg);
+                }
+                to {
+                    transform: translateY(-900px) translateX(40px) rotate(18deg);
+                }
+            }
 
-        .nav-buttons.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+            .letter {
+                position: relative;
+                margin: 6px;
+                padding: 22px 22px 18px;
+                background: var(--paper);
+                border: 1px solid var(--edge);
+                border-radius: 18px;
+                overflow: hidden;
 
-        .nav-button {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            min-width: 120px;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-
-        .nav-button span {
-            pointer-events: none;
-            position: relative;
-            z-index: 1;
-        }
-
-        .nav-button::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            z-index: 0;
-            cursor: pointer;
-            border-radius: inherit;
-        }
-
-        .nav-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        .nav-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .icon-trigger {
-            cursor: pointer;
-            display: inline-block;
-            margin: 20px;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-        }
-
-        .icon-trigger img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-
-        .icon-trigger:hover img {
-            transform: scale(1.2);
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .message {
-            font-size: 1em;
-            line-height: 1.6;
-            opacity: 0;
-            transform: translateY(20px);
-            font-weight: 400;
-            letter-spacing: 0.3px;
-        }
-
-        .message.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.5s ease-out;
-        }
-
-        .message span {
-            display: inline-block;
-            opacity: 0;
-        }
-
-        .message span.animate {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
-            opacity: 0;
-            box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .shooting-star {
-            position: absolute;
-            height: 2px;
-            width: 150px;
-            background: linear-gradient(to left, white, transparent);
-            border-radius: 999px;
-            filter: drop-shadow(0 0 6px white);
-            transform: rotate(25deg);
-            animation: shoot linear infinite;
-        }
-
-        @keyframes shoot {
-            0% {
-                transform: rotate(25deg) translateX(-200px);
+                transform: translateY(26px);
+                opacity: 0;
+                transition:
+                    transform 0.75s cubic-bezier(0.2, 0.9, 0.2, 1),
+                    opacity 0.75s cubic-bezier(0.2, 0.9, 0.2, 1);
+                box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+                z-index: 2;
+            }
+            .is-open .letter {
+                transform: translateY(0px);
                 opacity: 1;
             }
-            70% {
+
+            .letter::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background:
+                    linear-gradient(
+                        transparent 24px,
+                        rgba(0, 0, 0, 0.035) 25px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        transparent 18px,
+                        rgba(255, 111, 163, 0.2) 18px 20px,
+                        transparent 20px
+                    ),
+                    repeating-linear-gradient(
+                        0deg,
+                        rgba(0, 0, 0, 0.015) 0 2px,
+                        transparent 2px 6px
+                    );
+                background-size:
+                    100% 26px,
+                    100% 100%,
+                    100% 100%;
+                opacity: 0.65;
+                pointer-events: none;
+                mix-blend-mode: multiply;
+            }
+            .crayon-scribble {
+                position: absolute;
+                right: -40px;
+                top: -40px;
+                width: 180px;
+                height: 180px;
+                background: radial-gradient(
+                    circle at 40% 40%,
+                    rgba(255, 216, 168, 0.65),
+                    rgba(255, 111, 163, 0.2) 55%,
+                    transparent 70%
+                );
+                transform: rotate(12deg);
+                opacity: 0.85;
+                pointer-events: none;
+            }
+
+            .header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 14px;
+                position: relative;
+                z-index: 3;
+            }
+            h1 {
+                margin: 0;
+                font-family: "Short Stack", "Nunito", system-ui, sans-serif;
+                font-size: clamp(22px, 3.2vw, 34px);
+                line-height: 1.2;
+            }
+            .meta {
+                font-size: 13px;
+                color: var(--muted);
+                text-align: right;
+                white-space: nowrap;
+                font-family: "Short Stack", "Nunito", system-ui, sans-serif;
+            }
+
+            .mini-stamp {
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+                background: radial-gradient(
+                    circle at 30% 30%,
+                    #fff,
+                    var(--stamp)
+                );
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                display: grid;
+                place-items: center;
+                flex: 0 0 auto;
+                user-select: none;
+                overflow: hidden;
+                position: relative;
+                transform: rotate(8deg);
+            }
+            .mini-stamp img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transform: rotate(-8deg) scale(1.04);
+                filter: saturate(1.02) contrast(1.02);
+            }
+            .mini-stamp::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(
+                    circle at 30% 25%,
+                    rgba(255, 255, 255, 0.85),
+                    transparent 55%
+                );
+                opacity: 0.45;
+                pointer-events: none;
+            }
+
+            .body {
+                position: relative;
+                z-index: 3;
+                margin-top: 14px;
+                color: #2f2c2b;
+                font-size: 16px;
+                line-height: 1.85;
+                min-height: 360px;
+            }
+            .typed-viewport {
+                position: relative;
+                max-height: 360px;
+                overflow: auto;
+                padding-right: 6px;
+                scroll-behavior: smooth;
+            }
+            .typed-viewport::-webkit-scrollbar {
+                width: 10px;
+            }
+            .typed-viewport::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 999px;
+                border: 3px solid rgba(255, 255, 255, 0.9);
+            }
+
+            .highlight {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 999px;
+                background: rgba(255, 111, 163, 0.14);
+                border: 1px solid rgba(255, 111, 163, 0.18);
+                font-family: "Short Stack", "Nunito", system-ui, sans-serif;
+            }
+            .divider {
+                margin: 14px 0;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0, 0, 0, 0.12),
+                    transparent
+                );
+                border: 0;
+            }
+
+            .footer {
+                position: relative;
+                z-index: 3;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-top: 10px;
+                flex-wrap: wrap;
+            }
+            .sign {
+                font-weight: 800;
+                font-family: "Short Stack", "Nunito", system-ui, sans-serif;
+            }
+            .btns {
+                display: none;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .is-open .btns {
+                display: flex;
+            }
+
+            button {
+                border: 1px solid rgba(0, 0, 0, 0.12);
+                background: #fff;
+                padding: 10px 12px;
+                border-radius: 14px;
+                cursor: pointer;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+                font-weight: 800;
+                font-family: "Nunito", system-ui, sans-serif;
+            }
+            button:active {
+                transform: translateY(1px);
+            }
+            .primary {
+                background: linear-gradient(180deg, #ff8bb6, #ff6fa3);
+                color: white;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            [data-type] {
+                visibility: hidden;
+                opacity: 0;
+            }
+            .typed-ready[data-type] {
+                visibility: visible;
                 opacity: 1;
             }
-            100% {
-                transform: rotate(25deg) translateX(120vw);
-                opacity: 0;
+
+            .typefade {
+                position: relative;
             }
-        }
-
-        .gallery-button {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            color: white;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.1em;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(20px);
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            min-width: 180px;
-            z-index: 1;
-        }
-
-        .gallery-button::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            z-index: 0;
-            cursor: pointer;
-        }
-
-        .gallery-button.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .gallery-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .popup-overlay.visible {
-            opacity: 1;
-        }
-
-        .gallery-popup {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            padding: 24px;
-            border-radius: 20px;
-            max-width: 95%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .gallery-item {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease-out;
-        }
-
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-            border-radius: 12px;
-        }
-
-        .gallery-item:hover::before {
-            opacity: 1;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.08);
-        }
-
-        .close-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            transition: background 0.3s ease;
-        }
-
-        .close-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Tambahkan style untuk galeri dan popup */
-        .gallery {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .gallery.visible {
-            display: flex;
-        }
-
-        .gallery img {
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 10px;
-            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
-        }
-
-        .gallery:target {
-            display: flex;
-        }
-
-        /* Animasi untuk tombol galeri */
-        .gallery-button {
-            position: relative;
-            display: inline-block;
-            margin: 20px 0;
-            padding: 10px 20px;
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        .gallery-button:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transition: transform 0.4s ease;
-            z-index: 0;
-            transform: translate(-50%, -50%) scale(0);
-        }
-
-        .gallery-button:hover:before {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .gallery-button span {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Style untuk popup gambar */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .popup.visible {
-            display: flex;
-        }
-
-        .popup img {
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 10px;
-            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
-        }
-
-        .popup:target {
-            display: flex;
-        }
-
-        /* Animasi untuk gambar dalam popup */
-        .popup img {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
+            .typefade .sentence {
+                display: inline;
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(6px);
+                transition:
+                    opacity 0.85s ease,
+                    transform 0.85s ease;
+                will-change: opacity, transform;
             }
-            to {
+            .typefade .sentence.show {
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
 
-        /* Loading Screen Styles */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #001220 0%, #001f36 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out;
-        }
-
-        .loading-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loading-animation {
-            width: 100px;
-            height: 100px;
-            position: relative;
-        }
-
-        .loading-heart {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('https://ik.imagekit.io/notargazyu/ayayaya/tobbycat.gif') center/contain no-repeat;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .loading-text {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 0.9em;
-            white-space: nowrap;
-            opacity: 0.8;
-        }
-
-        /* Smooth page transitions */
-        .message-page {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease-out;
-        }
-
-        .message-page[style*="block"] {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Hover effects for buttons */
-        .nav-button, .gallery-button {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-button:hover, .gallery-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Emoji Rain Styles */
-        .emoji {
-            position: fixed;
-            top: -20px;
-            font-size: 24px;
-            user-select: none;
-            pointer-events: none;
-            z-index: 1000;
-            animation: emojiRain linear;
-        }
-
-        @keyframes emojiRain {
-            0% {
-                transform: translateY(-20px) rotate(0deg);
-                opacity: 1;
+            .caret {
+                display: inline-block;
+                width: 2px;
+                height: 1em;
+                margin-left: 6px;
+                background: rgba(44, 42, 42, 0.7);
+                border-radius: 2px;
+                transform: translateY(2px);
+                animation: caretBlink 1.05s steps(1, end) infinite;
             }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
+            @keyframes caretBlink {
+                50% {
+                    opacity: 0;
+                }
+            }
+
+            .footer-sign {
+                position: relative;
                 opacity: 0;
+                transform: translateY(14px);
+                transition:
+                    opacity 0.7s ease,
+                    transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1);
             }
-        }
+            .footer-sign.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .footer-sign::before {
+                content: "";
+                position: absolute;
+                left: -10px;
+                right: -10px;
+                top: -6px;
+                bottom: -6px;
+                border-radius: 14px;
+                background:
+                    radial-gradient(
+                        120px 46px at 18% 55%,
+                        rgba(30, 20, 10, 0.16),
+                        transparent 62%
+                    ),
+                    radial-gradient(
+                        90px 40px at 60% 40%,
+                        rgba(30, 20, 10, 0.12),
+                        transparent 68%
+                    ),
+                    radial-gradient(
+                        140px 52px at 86% 65%,
+                        rgba(30, 20, 10, 0.1),
+                        transparent 70%
+                    );
+                opacity: 0;
+                transform: scale(0.92);
+                filter: blur(6px);
+                transition:
+                    opacity 0.9s ease,
+                    transform 0.9s ease,
+                    filter 0.9s ease;
+                pointer-events: none;
+                mix-blend-mode: multiply;
+            }
+            .footer-sign.show::before {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(2px);
+            }
+        </style>
+    </head>
 
-        /* Watermark Styles */
-        .watermark {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.15);
-            pointer-events: none;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            z-index: 9999;
-            transform: rotate(-45deg);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        
-    </style>
-</head>
-<body>
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-animation">
-            <div class="loading-heart"></div>
-            <div class="loading-text">Loading...</div>
-        </div>
-    </div>
-    <div id="stars" class="stars"></div>
-    <div class="sea">
-        <div class="wave"></div>
-        <div class="wave wave-2"></div>
-        <div class="wave wave-3"></div>
-    </div>
-    
-    <audio id="bgMusic" preload="auto">
-        <source src="https://github.com/kingrize/aiyayiay/raw/refs/heads/main/song/do_you_think_you_could_love_me.mp3" type="audio/mp3">
-    </audio>
-    
-    <div class="popup-overlay" id="galleryOverlay">
-        <div class="gallery-popup">
-            <button class="close-button" id="closeGallery">×</button>
-            <div class="gallery-grid" id="galleryGrid">
-                </div>
-        </div>
-    </div>
+    <body>
+        <div class="wrap">
+            <div class="envelope" id="envelope">
+                <div class="floaties" id="floaties" aria-hidden="true"></div>
 
-    <div class="container">
-        <div class="icon-trigger" id="trigger">
-            <img src="https://ik.imagekit.io/notargazyu/ayayaya/tobbycat.gif" alt="Cute Cat">
-        </div>
-        <div class="message-container" id="messageContainer">
-            <div class="message" id="message">
-                <div class="message-page" data-page="1">
-                    <span>Hey Aiya✨</span><br>
-                    <span>Jiya here.</span><br>
-                    <span>I want to tell you something important...</span><br>
+                <div class="doodle" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path
+                            d="M6,10 C18,3 30,6 44,8 C60,10 74,4 92,10
+                   C97,18 95,32 94,48 C93,64 98,76 92,90
+                   C76,96 62,92 48,93 C34,94 22,98 8,92
+                   C3,78 6,66 6,52 C6,36 2,22 6,10Z"
+                        />
+                    </svg>
                 </div>
-                <div class="message-page" data-page="2" style="display: none;">
-                    <span>Thank you for trusting me with your story</span><br>
-                    <span>Seriously...</span><br>
-                    <span>It takes incredible courage to open up like that</span><br>
+
+                <div
+                    class="seal"
+                    id="sealOpen"
+                    role="button"
+                    aria-label="Buka surat"
+                    tabindex="0"
+                >
+                    🧸
                 </div>
-                <div class="message-page" data-page="3" style="display: none;">
-                    <span>I feel so honored</span><br>
-                    <span>that you felt safe enough</span><br>
-                    <span>to share that piece of your heart with me</span><br>
-                </div>
-                <div class="message-page" data-page="4" style="display: none;">
-                    <span>Hearing everything you've been through—</span><br>
-                    <span>your past, the pain,</span><br>
-                    <span>the things that still weigh on you</span><br>
-                </div>
-                <div class="message-page" data-page="5" style="display: none;">
-                    <span>it's like a puzzle piece just clicked into place</span><br>
-                    <span>It helps me understand you</span><br>
-                    <span>on a completely different, much deeper level</span><br>
-                </div>
-                <div class="message-page" data-page="6" style="display: none;">
-                    <span>And you know what?</span><br>
-                    <span>All those experiences,</span><br>
-                    <span>as hard and as unfair as they were</span><br>
-                    <span>they've shaped the person you are today</span><br>
-                </div>
-                <div class="message-page" data-page="7" style="display: none;">
-                    <span>The way you see the world,</span><br>
-                    <span>your sensitivity, your depth,</span><br>
-                    <span>even the little quirks in your personality</span><br>
-                </div>
-                <div class="message-page" data-page="8" style="display: none;">
-                    <span>I don't see them as baggage</span><br>
-                    <span>or something 'wrong' with you</span><br>
-                    <span>Far from it.</span><br>
-                    <span>They are a part of your journey</span><br>
-                </div>
-                <div class="message-page" data-page="9" style="display: none;">
-                    <span>And I want you to know,</span><br>
-                    <span>I genuinely like that part of you</span><br>
-                    <span>I like the person you are,</span><br>
-                    <span>right here, right now</span><br>
-                </div>
-                <div class="message-page" data-page="10" style="display: none;">
-                    <span>Everything you feel is so incredibly valid</span><br>
-                    <span>So please, don't ever let anyone,</span><br>
-                    <span>including yourself,</span><br>
-                    <span>make you feel otherwise</span><br>
-                </div>
-                <div class="message-page" data-page="11" style="display: none;">
-                    <span>When I look at you,</span><br>
-                    <span>I don't see someone who is broken;</span><br>
-                    <span>I see someone who has survived so much</span><br>
-                </div>
-                <div class="message-page" data-page="12" style="display: none;">
-                    <span>I see your strength,</span><br>
-                    <span>even in the moments</span><br>
-                    <span>you might feel weak</span><br>
-                </div>
-                <div class="message-page" data-page="13" style="display: none;">
-                    <span>So please, let yourself breathe</span><br>
-                    <span>Know that you don't have to carry</span><br>
-                    <span>all of that weight alone anymore</span><br>
-                </div>
-                <div class="message-page" data-page="14" style="display: none;">
-                    <span>I'm here, and I truly, deeply care about you</span><br>
-                    <span>That's not just something I'm saying</span><br>
-                    <span>I mean it. It's okay. I get it</span><br>
-                </div>
-                <div class="message-page" data-page="15" style="display: none;">
-                    <span>I'm not going anywhere</span><br>
-                    <span>I'm on your side,</span><br>
-                    <span>today, tomorrow, and always 💝</span><br>
-                    <button class="gallery-button" id="openGallery" style="display: none;">Open Gallery 🌟</button>
+
+                <div class="letter" id="letter" aria-live="polite">
+                    <div class="crayon-scribble" aria-hidden="true"></div>
+
+                    <div class="header">
+                        <div>
+                            <h1>
+                                Selamat Ulang Tahun,
+                                <span class="highlight" id="panggilan"
+                                    >sayang</span
+                                >
+                            </h1>
+                            <div class="meta">
+                                <div id="tanggal"></div>
+                                <div>Dari: <b id="fromName">aku</b></div>
+                            </div>
+                        </div>
+
+                        <div class="mini-stamp" title="stempel imut">
+                            <img
+                                id="stampPhoto"
+                                src="https://raw.githubusercontent.com/kingrize/aiyayiay/main/img/aiya-pfp.jpg"
+                                alt="Aiya"
+                                loading="eager"
+                                decoding="async"
+                                crossorigin="anonymous"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="body">
+                        <div class="typed-viewport" id="typedViewport">
+                            <p data-type>Hai sayang 🤍</p>
+                            <p data-type>Jiya a.k.a your boyfriend here!</p>
+                            <p data-type>
+                                Selamat ulangtahun ya sayang! ummm... thank you
+                                for staying:D There were days that felt heavy,
+                                days when you had to be strong even when you
+                                didn’t feel okay at all. And honestly, I just
+                                want you to know that I see you.
+                            </p>
+                            <hr class="divider" data-type />
+                            <p data-type>
+                                You don’t always have to be strong, sayang. I
+                                might not be able to fix everything, but I want
+                                to be your safe place. The place where you can
+                                rest, where you don’t have to pretend, where you
+                                can just be… you.
+                            </p>
+                            <p data-type>
+                                On your birthday, I don’t wish for you to become
+                                someone else. I just hope you’ll be a little
+                                kinder to yourself. Because you deserve
+                                happiness. You deserve peace. And you deserve
+                                love exactly as you are sayangku&lt;3!
+                            </p>
+                            <p data-type>
+                                Thank you for holding on, Aiya. I’m really proud
+                                of you. And I love you, more than I could ever
+                                put into words sayang!
+                            </p>
+                            <p data-type style="margin-top: 16px">
+                                P.S. If one day you forget how strong and
+                                precious you are, pleaseee remember… you have
+                                meeee. Always. Happy birthday, my love!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="footer" id="letterFooter">
+                        <div class="footer-sign" id="footerSign">
+                            Your boyfriend,<br />
+                            <span class="sign" id="ttd">— Jiya</span>
+                        </div>
+
+                        <div class="btns">
+                            <button id="btnClose" class="primary">Tutup</button>
+                            <button id="btnCrayon">🍰 Gift</button>
+                            <button onclick="window.print()">📷</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="nav-buttons" id="messageNav">
-                <button class="nav-button" id="prevBtn" disabled><span style="pointer-events: none;">← Prev</span></button>
-                <button class="nav-button" id="nextBtn"><span style="pointer-events: none;">Next →</span></button>
-            </div>
         </div>
-        <button class="gallery-button" id="openGallery">
-            <span>Buka Galeri 📸</span>
-        </button>
-    </div>
 
-    <div class="watermark">Created by Jiya</div>
+        <audio
+            id="bgm"
+            preload="auto"
+            crossorigin="anonymous"
+            src="https://raw.githubusercontent.com/kingrize/aiyayiay/main/song/wildflower.mp3"
+        ></audio>
 
-    <script>
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const numberOfStars = 200;
+        <script>
+            const herName = "Aiya";
+            const myName = "Jiya";
+            const callHer = "sayang";
 
-            for (let i = 0; i < numberOfStars; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                const x = Math.random() * 100;
-                const y = Math.random() * 100;
-                const size = Math.random() * 2;
-                const duration = 3 + Math.random() * 3;
-                
-                star.style.cssText = `
-                    left: ${x}%;
-                    top: ${y}%;
-                    width: ${size}px;
-                    height: ${size}px;
-                    --duration: ${duration}s;
-                `;
-                
-                starsContainer.appendChild(star);
+            const envelope = document.getElementById("envelope");
+            const floaties = document.getElementById("floaties");
+            const panggilan = document.getElementById("panggilan");
+            const fromName = document.getElementById("fromName");
+            const ttd = document.getElementById("ttd");
+            const typedViewport = document.getElementById("typedViewport");
+            const sealOpen = document.getElementById("sealOpen");
+            const footerSign = document.getElementById("footerSign");
+
+            const bgm = document.getElementById("bgm");
+            bgm.loop = true;
+            bgm.volume = 0.55;
+            try {
+                bgm.load();
+            } catch (e) {}
+
+            panggilan.textContent = callHer;
+            fromName.textContent = myName;
+            ttd.textContent = "— " + myName;
+
+            const now = new Date();
+            const opts = {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
+            document.getElementById("tanggal").textContent =
+                now.toLocaleDateString("id-ID", opts);
+
+            envelope.classList.remove("is-open");
+
+            function sprinkleCute(count = 10, mode = "cute") {
+                const cute = ["💗", "✨", "🎀", "🧸", "🌷", "🍪", "☁️", "💕"];
+                const crayon = ["🖍️", "✏️", "⭐", "🧡", "💛", "💙", "💚", "💜"];
+                const icons = mode === "crayon" ? crayon : cute;
+
+                for (let i = 0; i < count; i++) {
+                    const s = document.createElement("span");
+                    s.textContent =
+                        icons[Math.floor(Math.random() * icons.length)];
+                    s.style.left = Math.random() * 100 + "%";
+                    s.style.bottom = -20 - Math.random() * 80 + "px";
+                    s.style.animationDuration = 7 + Math.random() * 6 + "s";
+                    s.style.fontSize = 14 + Math.random() * 14 + "px";
+                    s.style.opacity = 0.35 + Math.random() * 0.55;
+                    floaties.appendChild(s);
+                    setTimeout(() => s.remove(), 12000);
+                }
             }
-        }
 
-        // Membuat bintang jatuh
-        function createShootingStar() {
-            const star = document.createElement('div');
-            star.className = 'shooting-star';
-            
-            star.style.top = `${Math.random() * 60}%`;
-            const duration = 2 + Math.random() * 2;
-            star.style.animationDuration = `${duration}s`;
-            
-            document.body.appendChild(star);
-            
-            setTimeout(() => {
-                star.remove();
-            }, duration * 1000);
-        }
+            const typedEls = Array.from(
+                document.querySelectorAll("[data-type]"),
+            );
+            const original = new Map();
+            typedEls.forEach((el) => original.set(el, el.innerHTML));
 
-        let shootingStarInterval;
-        function startShootingStars() {
-            clearInterval(shootingStarInterval);
-            shootingStarInterval = setInterval(createShootingStar, 1800);
-        }
-        function animateMessage(page) {
-            const spans = page.querySelectorAll('span');
-            spans.forEach((span, index) => {
-                span.classList.remove('animate');
-                setTimeout(() => {
-                    span.classList.add('animate');
-                }, index * 100);
-            });
-        }
+            function splitIntoSentences(text) {
+                const t = (text || "")
+                    .replace(/\s+/g, " ")
+                    .replace(/\s([,.!?…:;])/g, "$1")
+                    .trim();
+                if (!t) return [];
+                const matches = t.match(/[^.!?…]+[.!?…]+|[^.!?…]+$/g);
+                return (matches || []).map((s) => s.trim()).filter(Boolean);
+            }
 
-        // Navigasi pesan
-        let currentPage = 1;
-        const totalPages = 15;
+            function enhanceInlineHTML(sentence) {
+                return sentence
+                    .replace(
+                        /\bsayang\b/gi,
+                        `<span class="highlight">${callHer}</span>`,
+                    )
+                    .replace(/\bAiya\b/g, `<b>${herName}</b>`);
+            }
 
-        let isAnimating = false;
+            function prepareForTyping() {
+                typedViewport.scrollTop = 0;
+                footerSign.classList.remove("show");
 
-        function updateNavigation() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const galleryBtn = document.getElementById('openGallery');
-            
-            // Update navigation buttons
-            prevBtn.disabled = currentPage === 1;
-            nextBtn.disabled = currentPage === totalPages;
-            
-            // Get old and new pages
-            const oldPage = document.querySelector('.message-page[style*="block"]');
-            const newPage = document.querySelector(`.message-page[data-page="${currentPage}"]`);
-            
-            if (oldPage) {
-                oldPage.style.opacity = '0';
-                oldPage.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    oldPage.style.display = 'none';
-                    newPage.style.display = 'block';
-                    
-                    requestAnimationFrame(() => {
-                        newPage.style.opacity = '1';
-                        newPage.style.transform = 'translateY(0)';
-                        animateMessage(newPage);
-                    });
-                }, 300);
-            } else {
-                newPage.style.display = 'block';
-                requestAnimationFrame(() => {
-                    newPage.style.opacity = '1';
-                    newPage.style.transform = 'translateY(0)';
-                    animateMessage(newPage);
+                typedEls.forEach((el) => {
+                    el.classList.add("typed-ready");
+                    el.classList.remove("typefade");
+
+                    if (el.tagName === "HR") {
+                        el.style.opacity = "0";
+                        el.style.transition = "opacity .35s ease";
+                    } else {
+                        el.innerHTML = "";
+                    }
                 });
             }
-            
-            // Handle gallery button visibility
-            if (galleryBtn) {
-                if (currentPage === totalPages) {
-                    galleryBtn.style.display = 'inline-block';
-                    setTimeout(() => {
-                        galleryBtn.classList.add('visible');
-                    }, 500);
-                } else {
-                    galleryBtn.classList.remove('visible');
-                    setTimeout(() => {
-                        galleryBtn.style.display = 'none';
-                    }, 300);
-                }
+
+            function textFromHTML(html) {
+                const tmp = document.createElement("div");
+                tmp.innerHTML = html;
+                return (tmp.textContent || "").trim();
             }
-        }
 
-        // Update event listeners for navigation
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            if (!isAnimating && currentPage > 1) {
-                isAnimating = true;
-                currentPage--;
-                updateNavigation();
-                setTimeout(() => {
-                    isAnimating = false;
-                }, 500);
-            }
-        });
+            async function playTypeFade() {
+                const sentenceDelay = 1020;
+                const elementDelay = 580;
+                const hrDelay = 380;
+                const openLeadDelay = 240;
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (!isAnimating && currentPage < totalPages) {
-                isAnimating = true;
-                currentPage++;
-                updateNavigation();
-                setTimeout(() => {
-                    isAnimating = false;
-                }, 500);
-            }
-        });
+                await new Promise((r) => setTimeout(r, openLeadDelay));
 
-        // Gallery functionality
-        const galleryOverlay = document.getElementById('galleryOverlay');
-        const openGalleryBtn = document.getElementById('openGallery');
-        const closeGalleryBtn = document.getElementById('closeGallery');
-
-        function showGallery() {
-            galleryOverlay.style.display = 'flex';
-            setTimeout(() => {
-                galleryOverlay.classList.add('visible');
-            }, 10);
-        }
-
-        function hideGallery() {
-            galleryOverlay.classList.remove('visible');
-            setTimeout(() => {
-                galleryOverlay.style.display = 'none';
-            }, 300);
-        }
-
-        openGalleryBtn.addEventListener('click', showGallery);
-        closeGalleryBtn.addEventListener('click', hideGallery);
-
-        galleryOverlay.addEventListener('click', (e) => {
-            if (e.target === galleryOverlay) {
-                hideGallery();
-            }
-        });
-
-        // Event listener untuk icon trigger
-        document.getElementById('trigger').addEventListener('click', async function() {
-            const messageContainer = document.getElementById('messageContainer');
-            const message = document.getElementById('message');
-            const messageNav = document.getElementById('messageNav');
-            
-            if (!messageContainer.classList.contains('visible')) {
-                // Start music first
-                try {
-                    bgMusic.load(); // Reload the audio element
-                    const playPromise = bgMusic.play();
-                    if (playPromise !== undefined) {
-                        playPromise
-                            .then(() => {
-                                console.log('Audio started playing');
-                                musicStarted = true;
-                                bgMusic.volume = 0.5;
-                                updateLyrics();
-                            })
-                            .catch(error => {
-                                console.error('Playback failed:', error);
-                                // Try alternative playback method
-                                setTimeout(() => {
-                                    bgMusic.play()
-                                        .then(() => {
-                                            musicStarted = true;
-                                            bgMusic.volume = 0.5;
-                                            updateLyrics();
-                                        })
-                                        .catch(e => console.error('Retry failed:', e));
-                                }, 1000);
-                            });
+                for (const el of typedEls) {
+                    if (el.tagName === "HR") {
+                        el.classList.add("typefade");
+                        el.style.opacity = "1";
+                        await new Promise((r) => setTimeout(r, hrDelay));
+                        continue;
                     }
-                } catch (error) {
-                    console.error('Error playing music:', error);
-                }
 
-                messageContainer.classList.add('visible');
-                setTimeout(() => {
-                    message.classList.add('visible');
-                    messageNav.classList.add('visible');
-                    updateNavigation();
-                    startShootingStars();
-                }, 500);
-                
-                // Ganti icon setelah diklik
-                const img = this.querySelector('img');
-                img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbylove.gif';
-                setTimeout(() => {
-                    img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
-                }, 5000);
-            }
-        });
+                    const raw = textFromHTML(original.get(el) || "");
+                    const sentences = splitIntoSentences(raw);
 
-        // Lyrics data
-        const lyrics = [
-            { time: 1, text: "Aiyayayayaaa aloo"},
-            { time: 15, text: "Jiya here...." },
-            { time: 28, text: "Beautiful sight, I see when I sleep" },
-            { time: 34, text: "You under streetlights, waiting for me" },
-            { time: 43, text: "Hold my hand" },
-            { time: 45, text: "I'll take you through my dreams" },
-            { time: 51, text: "Wherever you are" },
-            { time: 56, text: "I'll never let go 'cause you're the one I want" },
-            { time: 62, text: "Stay with my life, I can promise you your smile" },
-            { time: 71, text: "With all my days" },
-            { time: 78, text: "Do you think you could love me?" },
-            { time: 84, text: "And I'll show you what makes you lovely" },
-            { time: 92, text: "I love you to the stars and back" },
-            { time: 99, text: "Give me your heart and I'll give you mine" },
-            { time: 111, text: "Don't you like when I'm around?" },
-            { time: 115, text: "Could you just pretend you care? " },
-            { time: 118, text: "I belong with you, my love " },
-            { time: 122, text: "Dreaming you anywhere" },
-            { time: 127, text: "We can watch the sunset, but you're with me there" },
-            { time: 137, text: "And I'll" },
-            { time: 143, text: "Pray for a light" },
-            { time: 147, text: "And hope it brings you right to me" },
-            { time: 154, text: "I'll watch you shining, my darling" },
-            { time: 162, text: "Do you think you could love me?" },
-            { time: 168, text: "And I'll show you what makes you lovely" },
-            { time: 176, text: "I love you to the stars and back" },
-            { time: 182, text: "Give me your heart and I'll give you mine" },
-            { time: 190, text: "Live life fully" },
-            { time: 195, text: "Okay? hehe" }
-        ];
+                    el.classList.add("typefade");
+                    el.innerHTML = sentences
+                        .map(
+                            (s) =>
+                                `<span class="sentence">${enhanceInlineHTML(s)} </span>`,
+                        )
+                        .join("");
 
-        // Music and lyrics functionality
-        const bgMusic = document.getElementById('bgMusic');
-        const lyricsContainer = document.getElementById('lyricsContainer');
-        let musicStarted = false;
-        let currentLyricIndex = 0;
+                    const caret = document.createElement("span");
+                    caret.className = "caret";
+                    caret.setAttribute("aria-hidden", "true");
+                    el.appendChild(caret);
 
-        function updateLyrics() {
-            if (!musicStarted || !bgMusic.duration) return;
-            
-            const currentTime = Math.floor(bgMusic.currentTime);
-            
-            // Check all lyrics that need to be displayed
-            while (currentLyricIndex < lyrics.length) {
-                const currentLyric = lyrics[currentLyricIndex];
-                const nextLyric = lyrics[currentLyricIndex + 1];
-                
-                if (currentTime >= currentLyric.time && (!nextLyric || currentTime < nextLyric.time)) {
-                    // Create floating lyrics element
-                    const lyricElement = document.createElement('div');
-                    lyricElement.className = 'floating-lyrics';
-                    lyricElement.textContent = currentLyric.text;
-                    
-                    // Set initial position and style
-                    lyricElement.style.left = '50%';
-                    lyricElement.style.bottom = '10%';
-                    lyricElement.style.transform = 'translateX(-50%)';
-                    lyricElement.style.opacity = '0';
-                    
-                    document.body.appendChild(lyricElement);
-                    
-                    // Trigger animation
-                    requestAnimationFrame(() => {
-                        lyricElement.style.opacity = '1';
-                        lyricElement.classList.add('visible');
-                    });
-                    
-                    // Calculate display duration
-                    const displayDuration = nextLyric 
-                        ? (nextLyric.time - currentLyric.time) * 1000 
-                        : 4000;
-                    
-                    // Remove after duration
-                    setTimeout(() => {
-                        lyricElement.style.opacity = '0';
-                        setTimeout(() => {
-                            if (lyricElement.parentNode) {
-                                lyricElement.remove();
-                            }
-                        }, 500);
-                    }, Math.min(displayDuration, 4000));
-                    
-                    currentLyricIndex++;
-                } else {
-                    break;
-                }
-            }
-            
-            // Continue checking if music is still playing
-            if (!bgMusic.paused) {
-                requestAnimationFrame(updateLyrics);
-            }
-        }
-
-        // Add event listener for when music ends
-        bgMusic.addEventListener('ended', () => {
-            musicStarted = false;
-            currentLyricIndex = 0;
-        });
-
-        // Add event listener for music loading
-        bgMusic.addEventListener('canplaythrough', () => {
-            console.log('Music loaded and ready to play');
-        });
-
-        // Add error handling for music
-        bgMusic.addEventListener('error', (e) => {
-            console.error('Error loading music:', e);
-        });
-
-        function startMusic() {
-            if (!musicStarted) {
-                musicStarted = true;
-                bgMusic.volume = 0.5; // Set volume to 50%
-                bgMusic.play();
-                updateLyrics();
-            }
-        }
-
-        // Modify existing trigger click event to include music
-        document.getElementById('trigger').addEventListener('click', function() {
-            startMusic(); // Start music on first interaction
-            const messageContainer = document.getElementById('messageContainer');
-            const message = document.getElementById('message');
-            const messageNav = document.getElementById('messageNav');
-            
-            if (!messageContainer.classList.contains('visible')) {
-                messageContainer.classList.add('visible');
-                setTimeout(() => {
-                    message.classList.add('visible');
-                    messageNav.classList.add('visible');
-                    updateNavigation();
-                    startShootingStars();
-                }, 500);
-                
-                const img = this.querySelector('img');
-                img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbylove.gif';
-                setTimeout(() => {
-                    img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
-                }, 5000);
-            }
-        });
-
-        // Inisialisasi bintang saat halaman dimuat
-        createStars();
-
-        // Galeri gambar
-        const galleryImages = [
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya1.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya2.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya3.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya4.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya5.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya6.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya7.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya8.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya9.jpg',
-            'https://ik.imagekit.io/notargazyu/ayayaya/aya10.jpg'
-        ];
-
-        const galleryGrid = document.getElementById('galleryGrid');
-
-        // Menambahkan gambar ke galeri
-        galleryImages.forEach((imageSrc) => {
-            const itemContainer = document.createElement('div');
-            itemContainer.className = 'gallery-item';
-
-            const imgElement = document.createElement('img');
-            imgElement.src = imageSrc;
-            imgElement.alt = 'Gallery Image';
-            imgElement.loading = 'lazy';
-            
-            // Tambahkan gambar ke container
-            itemContainer.appendChild(imgElement);
-
-            // Tambahkan event listener untuk popup
-            itemContainer.addEventListener('click', () => {
-                openImageInPopup(imageSrc);
-            });
-
-            // Menambahkan container ke dalam grid galeri
-            galleryGrid.appendChild(itemContainer);
-        });
-
-        
-
-        // Membuka gambar dalam popup saat diklik
-        function openImageInPopup(imageSrc) {
-            const popup = document.createElement('div');
-            popup.className = 'popup visible';
-
-            const img = document.createElement('img');
-            img.src = imageSrc;
-            img.alt = 'Popup Image';
-
-            
-            img.style.animation = 'fadeIn 0.5s ease-out';
-
-            popup.appendChild(img);
-            document.body.appendChild(popup);
-
-            
-            popup.addEventListener('click', () => {
-                popup.remove();
-            });
-        }
-
-        // Menambahkan event listener untuk setiap gambar di galeri
-        document.querySelectorAll('.gallery-item').forEach((item) => {
-            item.addEventListener('click', () => {
-                const imageSrc = item.querySelector('img').src;
-                openImageInPopup(imageSrc);
-            });
-        });
-
-        
-function initializeAudio() {
-    bgMusic.addEventListener('loadeddata', () => {
-        console.log('Audio loaded successfully');
-    });
-
-    bgMusic.addEventListener('error', (e) => {
-        console.error('Audio loading error:', e);
-    });
-
-    
-    bgMusic.load();
-}
-
-
-window.addEventListener('load', initializeAudio);
-
-        
-        window.addEventListener('load', () => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            setTimeout(() => {
-                loadingScreen.classList.add('fade-out');
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, 1500); 
-        });
-
-        
-        window.addEventListener('load', () => {
-            const loadingScreen = document.getElementById('loadingScreen');
-            loadingScreen.classList.add('fade-out');
-            
-            
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 500); 
-        });
-
-        // Emoji Rain functionality
-        const emojis = ['💖', '🍓', '💕', '🍧', '✨', '💝', '🎀', '🌸', '🐱', '💗'];
-        let emojiRainInterval;
-        let isFirstClick = true;
-        let canTriggerEmojis = false;
-
-        function createEmoji() {
-            const emoji = document.createElement('div');
-            emoji.className = 'emoji';
-            
-            // Set random position from top of screen
-            emoji.style.left = `${Math.random() * 100}vw`;
-            emoji.style.top = '-20px';
-            
-            // Random emoji
-            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            // Random size between 20px and 40px
-            const size = 20 + Math.random() * 20;
-            emoji.style.fontSize = `${size}px`;
-            
-            // Random duration between 2s and 4s
-            const duration = 2 + Math.random() * 2;
-            emoji.style.animationDuration = `${duration}s`;
-            
-            document.body.appendChild(emoji);
-            
-            // Cleanup after animation
-            setTimeout(() => {
-                if (emoji && emoji.parentNode) {
-                    emoji.remove();
-                }
-            }, duration * 1000);
-        }
-
-        function startEmojiRain() {
-            console.log('Starting emoji rain...');
-            
-            // Stop any existing rain
-            if (emojiRainInterval) {
-                clearInterval(emojiRainInterval);
-                emojiRainInterval = null;
-            }
-            
-            // Initial burst
-            for (let i = 0; i < 30; i++) {
-                setTimeout(createEmoji, i * 50);
-            }
-            
-            // Continuous rain
-            emojiRainInterval = setInterval(createEmoji, 100);
-            
-            // Stop after 3 seconds
-            setTimeout(() => {
-                if (emojiRainInterval) {
-                    clearInterval(emojiRainInterval);
-                    emojiRainInterval = null;
-                }
-            }, 3000);
-        }
-
-        // Main click handler
-        const triggerElement = document.getElementById('trigger');
-        triggerElement.addEventListener('click', async function() {
-            const messageContainer = document.getElementById('messageContainer');
-            const message = document.getElementById('message');
-            const messageNav = document.getElementById('messageNav');
-            const img = this.querySelector('img');
-            
-            if (isFirstClick) {
-                isFirstClick = false;
-                messageContainer.classList.add('visible');
-                
-                // Try to play music immediately
-                try {
-                    await bgMusic.play();
-                    bgMusic.volume = 0.5;
-                    musicStarted = true;
-                    currentLyricIndex = 0;
-                    updateLyrics();
-                } catch (error) {
-                    console.error('Initial playback failed:', error);
-                    // Retry after user interaction
-                    const playPromise = bgMusic.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            bgMusic.volume = 0.5;
-                            musicStarted = true;
-                            currentLyricIndex = 0;
-                            updateLyrics();
-                        }).catch(err => console.error('Retry failed:', err));
+                    const spans = Array.from(el.querySelectorAll(".sentence"));
+                    for (const s of spans) {
+                        s.classList.add("show");
+                        typedViewport.scrollTo({
+                            top: typedViewport.scrollHeight,
+                            behavior: "smooth",
+                        });
+                        await new Promise((r) => setTimeout(r, sentenceDelay));
                     }
+
+                    caret.style.opacity = "0";
+                    caret.style.transition = "opacity .25s ease";
+                    await new Promise((r) => setTimeout(r, 160));
+                    caret.remove();
+
+                    await new Promise((r) => setTimeout(r, elementDelay));
                 }
 
-                setTimeout(() => {
-                    message.classList.add('visible');
-                    messageNav.classList.add('visible');
-                    updateNavigation();
-                    startShootingStars();
-                }, 500);
-                
-                img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbylove.gif';
-                setTimeout(() => {
-                    img.src = 'https://ik.imagekit.io/notargazyu/ayayaya/tabbycat_ok.gif';
-                    canTriggerEmojis = true;
-                }, 5000);
-            } else if (canTriggerEmojis && img.src.includes('tabbycat_ok.gif')) {
-                startEmojiRain();
+                await new Promise((r) => setTimeout(r, 650));
+                footerSign.classList.add("show");
             }
-        });
 
-        // Prevent right click and text selection
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
-        document.addEventListener('selectstart', (e) => e.preventDefault());
-        
-        // Disable keyboard shortcuts for copy/paste/etc
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && 
-                ['c', 'x', 'u', 's', 'p'].includes(e.key.toLowerCase())) {
-                e.preventDefault();
-                return false;
+            function resetToHidden() {
+                typedViewport.scrollTop = 0;
+                footerSign.classList.remove("show");
+
+                typedEls.forEach((el) => {
+                    el.classList.remove("typed-ready");
+                    el.classList.remove("typefade");
+
+                    if (el.tagName === "HR") {
+                        el.style.opacity = "";
+                        el.style.transition = "";
+                    } else {
+                        el.innerHTML = original.get(el);
+                    }
+                });
             }
-        });
-    </script>
-</body>
+
+            async function startMusicOnGesture() {
+                try {
+                    if (bgm.paused) {
+                        bgm.muted = false;
+                        bgm.currentTime = 0;
+                        await bgm.play();
+                    }
+                } catch (e) {}
+            }
+
+            let isPlaying = false;
+
+            async function openLetter() {
+                if (isPlaying || envelope.classList.contains("is-open")) return;
+                isPlaying = true;
+
+                await startMusicOnGesture();
+
+                envelope.classList.add("is-open");
+                sprinkleCute(10, "cute");
+
+                prepareForTyping();
+                await playTypeFade();
+
+                isPlaying = false;
+            }
+
+            function closeLetter() {
+                envelope.classList.remove("is-open");
+                floaties.innerHTML = "";
+                isPlaying = false;
+                resetToHidden();
+            }
+
+            sealOpen.addEventListener("click", openLetter);
+            sealOpen.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openLetter();
+                }
+            });
+
+            document
+                .getElementById("btnClose")
+                .addEventListener("click", closeLetter);
+
+            const crayonLines = [
+                "I love youuuuu 🧡",
+                "Siknyal :D",
+                "kamu sangat cantik <3",
+                "mwahhh ~ ",
+                "sayangkuuuuuu 😽",
+            ];
+
+            document
+                .getElementById("btnCrayon")
+                .addEventListener("click", async () => {
+                    if (!envelope.classList.contains("is-open"))
+                        await openLetter();
+                    sprinkleCute(18, "crayon");
+
+                    const note = document.createElement("div");
+                    note.textContent =
+                        crayonLines[
+                            Math.floor(Math.random() * crayonLines.length)
+                        ];
+                    note.style.position = "absolute";
+                    note.style.right = "18px";
+                    note.style.bottom = "92px";
+                    note.style.maxWidth = "220px";
+                    note.style.padding = "10px 12px";
+                    note.style.borderRadius = "14px";
+                    note.style.background = "rgba(255,255,255,.85)";
+                    note.style.border = "2px dashed rgba(255,111,163,.35)";
+                    note.style.boxShadow = "0 12px 24px rgba(0,0,0,.08)";
+                    note.style.fontFamily =
+                        '"Short Stack","Nunito",system-ui,sans-serif';
+                    note.style.transform = `rotate(${(-6 + Math.random() * 12).toFixed(1)}deg)`;
+                    note.style.zIndex = "4";
+                    note.style.color = "#3b3330";
+
+                    const old = document.getElementById("crayonNote");
+                    if (old) old.remove();
+                    note.id = "crayonNote";
+
+                    document.getElementById("letter").appendChild(note);
+
+                    setTimeout(() => {
+                        note.style.opacity = "0";
+                        note.style.transition = "opacity .6s";
+                    }, 5200);
+                    setTimeout(() => {
+                        note.remove();
+                    }, 6000);
+                });
+        </script>
+    </body>
 </html>
